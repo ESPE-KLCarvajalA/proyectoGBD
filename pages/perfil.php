@@ -1,3 +1,45 @@
+<?php
+include_once 'Conexion.php';
+
+// CREATE
+if (isset($_POST['submit'])) {
+  $nombreCampo = $_POST['nombreCampo'];
+  $ubicacion = $_POST['ubicacion'];
+  $fechaDescubrimiento = $_POST['fechaDescubrimiento'];
+
+  // Obtener la conexión utilizando el método estático de la clase
+  $conexion = Cconexion::ConexionBD();
+
+  // Verificar si la conexión es válida antes de realizar la consulta
+  if ($conexion) {
+    // Preparar la llamada al procedimiento almacenado
+    $sql = "EXEC sp_InsertYacimiento @Nombre_campo=?, @Ubicacion=?, @Fecha_descubrimiento=?, @NuevoID=?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bindParam(1, $nombreCampo, PDO::PARAM_STR);
+    $stmt->bindParam(2, $ubicacion, PDO::PARAM_STR);
+    $stmt->bindParam(3, $fechaDescubrimiento, PDO::PARAM_STR);
+    $stmt->bindParam(4, $nuevoID, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT, 4);
+
+    // Ejecutar el procedimiento almacenado
+    $stmt->execute();
+
+    // $nuevoID ahora contiene el ID del nuevo registro insertado
+  } else {
+    echo "Error al establecer la conexión a la base de datos.";
+  }
+}
+
+// READ
+// Obtener la conexión utilizando el método estático de la clase
+$conexion = Cconexion::ConexionBD();
+
+if ($conexion) {
+  $sql = "SELECT * FROM Yacimiento";
+  $result = $conexion->query($sql);
+} else {
+  echo "Error al establecer la conexión a la base de datos.";
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,9 +48,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="icon" type="image/png" href="../assets/img/logo/logo_1.png">
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
   <title>
-   PetroCaSa
+    PetroCaSa
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -23,154 +69,81 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
-  <div class="position-absolute w-100 min-height-300 top-0" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
+  <div class="position-absolute w-100 min-height-300 top-0"
+    style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
     <span class="mask bg-primary opacity-6"></span>
   </div>
-  <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
-    <div class="sidenav-header">
-      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href="../pages/inicio.php" target="_blank">
-        <img src="../assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold">PetroCaSa</span>
-      </a>
-    </div>
-    <hr class="horizontal dark mt-0">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link " href="../pages/inicio.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Inicio</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="../pages/registro.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Trabajadores</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="../pages/extra.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Extracciones</span>
-          </a>
-        </li>
-        
-        <li class="nav-item mt-3">
-          <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Cuenta</h6>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="../pages/perfil.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Perfil</span>
-          </a>
-        </li>
-        
-      </ul>
-    </div>
-    
-  </aside>
+  <?php include '../elements/aside.php'; ?>
   <div class="main-content position-relative max-height-vh-100 h-100">
-    <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg bg-transparent shadow-none position-absolute px-4 w-100 z-index-2 mt-n11">
-      <div class="container-fluid py-1">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 ps-2 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="text-white opacity-5" href="../pages/inicio.php">Inicio</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Perfil</li>
-          </ol>
-          <h6 class="text-white font-weight-bolder ms-2">Perfil</h6>
-        </nav>
-        <div class="collapse navbar-collapse me-md-0 me-sm-4 mt-sm-0 mt-2" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            
-          </div>
-          <ul class="navbar-nav justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a  class="nav-link text-white font-weight-bold px-0">
-                <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">Inicio Sesión</span>
-              </a>
-            </li>
-            <li class="nav-item d-xl-none ps-3 pe-0 d-flex align-items-center">
-              <a href="#" class="nav-link text-white p-0">
-                <a href="#" class="nav-link text-white p-0" id="iconNavbarSidenav">
-                  <div class="sidenav-toggler-inner">
-                    <i class="sidenav-toggler-line bg-white"></i>
-                    <i class="sidenav-toggler-line bg-white"></i>
-                    <i class="sidenav-toggler-line bg-white"></i>
-                  </div>
-                </a>
-              </a>
-            </li>
-            <li class="nav-item px-3 d-flex align-items-center">
-              <a href="#" class="nav-link text-white p-0">
-                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
-              </a>
-            </li>
-            
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!-- End Navbar -->
-    
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-md-12">
           <div class="card">
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
-                <p class="mb-0">Editar Perfil</p>
-                <button class="btn btn-primary btn-sm ms-auto">Guardar</button>
+                <p class="mb-0">¡Agregar un nuevo Pozo!</p>
+                <!-- <button class="btn btn-primary btn-sm ms-auto" onclick="guardarPerfil()">Guardar</button> -->
               </div>
             </div>
             <div class="card-body">
-              <p class="text-uppercase text-sm">Información del Usuario</p>
-              <div class="row">
+              <form id="frmAgrega" class="row" method="post" action="perfil.php">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Usuario</label>
-                    <input class="form-control" type="text" value="lucky.jesse">
+                    <label for="nombreYa" class="form-control-label">Nombre del Yacimiento:</label>
+                    <input class="form-control" type="text" name="nombreCampo" id="nombreCampo">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Correo</label>
-                    <input class="form-control" type="email" value="jesse@example.com">
+                    <label for="ubicacion" class="form-control-label">Ubicación:</label>
+                    <input class="form-control" type="text" name="ubicacion" id="ubicacion">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Nombres</label>
-                    <input class="form-control" type="text" value="Jesse">
+                    <label for="fechaDes" class="form-control-label">Fecha de descubrimiento:</label>
+                    <input class="form-control" type="date" name="fechaDescubrimiento" id="fechaDes">
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Apellidos</label>
-                    <input class="form-control" type="text" value="Lucky">
-                  </div>
-                </div>
-              </div>
+                <div class="boton">
+                      <input class="btn btn-primary btn-sm ms-auto" onclick="guardarPerfil()" type="submit" name="submit" value="Agregar">
+                    </div>
+              </form>
               
+              <!-- ------ -->
             </div>
           </div>
         </div>
-        
       </div>
-      
     </div>
+
+    <script>
+      function guardarPerfil() {
+        // Obtener valores de los campos
+        var nombreCampo = document.getElementById("nombreCampo").value;
+        var ubicacion = document.getElementById("ubicacion").value;
+        var fechaDes = document.getElementById("fechaDes").value;
+
+        // Verificar si los campos están vacíos
+        if (nombreCampo === "" || ubicacion === "" || fechaDes === "") {
+          alert("Por favor, complete todos los campos antes de guardar.");
+        } else {
+          // Aquí puedes agregar el código para enviar el formulario si los campos están completos
+          document.getElementById("frmAgrega").submit();
+        }
+      }
+    </script>
+
+    </form>
   </div>
- 
+  </div>
+  </div>
+
+  </div>
+
+  </div>
+  </div>
+
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -192,3 +165,6 @@
 </body>
 
 </html>
+<?php
+$conexion = null; // Cerrar la conexión al final del script
+?>
