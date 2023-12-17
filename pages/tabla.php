@@ -1,7 +1,7 @@
 <?php
 // tabla.php
 
-include 'Conexion.php';
+include_once '../formularios/Conexion.php';
 
 // Obtener la conexión utilizando el método estático de la clase
 $conexion = Cconexion::ConexionBD();
@@ -13,8 +13,6 @@ if ($conexion) {
   echo "Error al establecer la conexión a la base de datos.";
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -81,40 +79,42 @@ if ($conexion) {
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">ID</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nombre</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Ubicación</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Fecha Descubrimiento</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">ID
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nombre
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                        Ubicación</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Fecha
+                        Descubrimiento</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
                   <tbody>
-                  <?php
-                  while ($fila = $result->fetch(PDO::FETCH_ASSOC)) {
-                    echo "<tr>";
-                    echo "<td class='text-center text-xs'>{$fila['id_campo_pk']}</td>";
-                    echo "<td class='text-center text-xs' opacity-7'>{$fila['nombre_campo']}</td>";
-                    echo "<td class='text-center text-xs' opacity-7'>{$fila['ubicacion']}</td>";
-                    echo "<td class='text-center text-xs' opacity-7'>{$fila['fecha_descubrimiento']}</td>";
-                    echo "<td class='text-center text-xs' opacity-7'><a href='editar.php?id={$fila['id_campo_pk']}'>Editar</a> | <a href='eliminar.php?id={$fila['id_campo_pk']}'>Eliminar</a></td>";
-                    echo "</tr>";
-                  }
-                  ?>
-                   </tbody>
+                    <?php
+                    while ($fila = $result->fetch(PDO::FETCH_ASSOC)) {
+                      echo "<tr>";
+                      echo "<td class='text-center text-xs'>{$fila['id_campo_pk']}</td>";
+                      echo "<td class='text-center text-xs' opacity-7'>{$fila['nombre_campo']}</td>";
+                      echo "<td class='text-center text-xs' opacity-7'>{$fila['ubicacion']}</td>";
+                      echo "<td class='text-center text-xs' opacity-7'>{$fila['fecha_descubrimiento']}</td>";
+                      echo "<td class='text-center text-xs' opacity-7'><a href='../crud/editar.php?id={$fila['id_campo_pk']}'>Editar</a> | <a href='eliminar.php?id={$fila['id_campo_pk']}'>Eliminar</a></td>";
+                      echo "</tr>";
+                    }
+                    ?>
+                  </tbody>
                 </table>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-          <a class="btn btn-raised btn-primary btn-lg" href="perfil.php"> 
-            <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
-       
+      <a class="btn btn-raised btn-primary btn-lg" href="../formularios/Yacimiento.php">
+        <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
     </div>
   </main>
   <?php
-  include '../elements/srcipts.php';
+  include '../elements/dependencias.php';
   ?>
 
 

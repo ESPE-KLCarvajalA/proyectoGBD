@@ -1,5 +1,5 @@
 <?php
-include_once 'Conexion.php';
+include_once '../crud/insertar.php'; // Ajusta la ruta según tu estructura de archivos
 
 // CREATE
 if (isset($_POST['submit'])) {
@@ -7,26 +7,8 @@ if (isset($_POST['submit'])) {
   $ubicacion = $_POST['ubicacion'];
   $fechaDescubrimiento = $_POST['fechaDescubrimiento'];
 
-  // Obtener la conexión utilizando el método estático de la clase
-  $conexion = Cconexion::ConexionBD();
-
-  // Verificar si la conexión es válida antes de realizar la consulta
-  if ($conexion) {
-    // Preparar la llamada al procedimiento almacenado
-    $sql = "EXEC sp_InsertYacimiento @Nombre_campo=?, @Ubicacion=?, @Fecha_descubrimiento=?, @NuevoID=?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bindParam(1, $nombreCampo, PDO::PARAM_STR);
-    $stmt->bindParam(2, $ubicacion, PDO::PARAM_STR);
-    $stmt->bindParam(3, $fechaDescubrimiento, PDO::PARAM_STR);
-    $stmt->bindParam(4, $nuevoID, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT, 4);
-
-    // Ejecutar el procedimiento almacenado
-    $stmt->execute();
-
-    // $nuevoID ahora contiene el ID del nuevo registro insertado
-  } else {
-    echo "Error al establecer la conexión a la base de datos.";
-  }
+  // Llama a la función de inserción
+  insertarYacimiento($nombreCampo, $ubicacion, $fechaDescubrimiento);
 }
 
 // READ
@@ -34,12 +16,16 @@ if (isset($_POST['submit'])) {
 $conexion = Cconexion::ConexionBD();
 
 if ($conexion) {
-  $sql = "SELECT * FROM Yacimiento";
+  $sql = "EXEC sp_GetYacimiento";
   $result = $conexion->query($sql);
 } else {
   echo "Error al establecer la conexión a la base de datos.";
 }
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -86,10 +72,10 @@ if ($conexion) {
               </div>
             </div>
             <div class="card-body">
-              <form id="frmAgrega" class="row" method="post" action="perfil.php">
+              <form id="frmAgrega" class="row" method="post" action="Yacimiento.php" onsubmit="return guardarPerfil()">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="nombreYa" class="form-control-label">Nombre del Yacimiento:</label>
+                    <label for="nombreCampo" class="form-control-label">Nombre del Yacimiento:</label>
                     <input class="form-control" type="text" name="nombreCampo" id="nombreCampo">
                   </div>
                 </div>
@@ -105,36 +91,39 @@ if ($conexion) {
                     <input class="form-control" type="date" name="fechaDescubrimiento" id="fechaDes">
                   </div>
                 </div>
+                <!-- <div class="boton">
+                  <input class="btn btn-primary btn-sm ms-auto" onclick="guardarPerfil()" type="submit" name="submit"
+                    value="Agregar">
+                </div> -->
+                <!-- ... Otros elementos HTML ... -->
+                <script>
+                  function guardarPerfil() {
+                    // Obtiene valores de los campos
+                    var nombreCampo = document.getElementById("nombreCampo").value;
+                    var ubicacion = document.getElementById("ubicacion").value;
+                    var fechaDes = document.getElementById("fechaDes").value;
+
+                    // Verifica si los campos están vacíos
+                    if (nombreCampo === "" || ubicacion === "" || fechaDes === "") {
+                      alert("Por favor, complete todos los campos antes de guardar.");
+                      return false; // Evita que el formulario se envíe si hay campos vacíos
+                    } else {
+                      return true; // Permite que el formulario se envíe si todos los campos están llenos
+                    }
+                  }
+                </script>
                 <div class="boton">
-                      <input class="btn btn-primary btn-sm ms-auto" onclick="guardarPerfil()" type="submit" name="submit" value="Agregar">
-                    </div>
+                  <input class="btn btn-primary btn-sm ms-auto" type="submit" name="submit"
+                    value="Agregar">
+                </div>
               </form>
-              
               <!-- ------ -->
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <script>
-      function guardarPerfil() {
-        // Obtener valores de los campos
-        var nombreCampo = document.getElementById("nombreCampo").value;
-        var ubicacion = document.getElementById("ubicacion").value;
-        var fechaDes = document.getElementById("fechaDes").value;
-
-        // Verificar si los campos están vacíos
-        if (nombreCampo === "" || ubicacion === "" || fechaDes === "") {
-          alert("Por favor, complete todos los campos antes de guardar.");
-        } else {
-          // Aquí puedes agregar el código para enviar el formulario si los campos están completos
-          document.getElementById("frmAgrega").submit();
-        }
-      }
-    </script>
-
-    </form>
+  </div>
   </div>
   </div>
   </div>
@@ -143,28 +132,10 @@ if ($conexion) {
 
   </div>
   </div>
-
-  <!--   Core JS Files   -->
-  <script src="../assets/js/core/popper.min.js"></script>
-  <script src="../assets/js/core/bootstrap.min.js"></script>
-  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-  </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/argon-dashboard.min.js?v=2.0.4"></script>
+  <?php include '../elements/dependencias.php'; ?>
 </body>
 
 </html>
 <?php
-$conexion = null; // Cerrar la conexión al final del script
+$conexion = null; // Cierra la conexión al final del script
 ?>
