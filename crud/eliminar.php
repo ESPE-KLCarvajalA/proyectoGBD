@@ -1,0 +1,52 @@
+<?php
+include_once '../formularios/Conexion.php';
+
+function eliminarYacimiento($idCampo) {
+    // Obtener la conexión utilizando el método estático de la clase
+    $conexion = Cconexion::ConexionBD();
+
+    // Verificar si la conexión es válida antes de realizar la consulta
+    if ($conexion) {
+        try {
+            // Preparar la llamada al procedimiento almacenado
+            $sql = "EXEC sp_DeleteYacimiento @IdCampo=?";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(1, $idCampo, PDO::PARAM_INT);
+
+            // Ejecutar el procedimiento almacenado
+            $stmt->execute();
+
+            // Verificar si se afectaron filas (si se eliminó algún registro)
+            $rowCount = $stmt->rowCount();
+
+            if ($rowCount > 0) {
+                echo "<script>
+                        alert('Registro eliminado correctamente.');
+                        window.location.href = '../pages/tabla.php'; // Redirige a la misma página
+                      </script>";
+            } else {
+                echo "<script>
+                        alert('No se encontró el registro para eliminar.');
+                        window.location.href = '../pages/tabla.php'; // Redirige a la misma página
+                      </script>";
+            }
+        } catch (PDOException $e) {
+            echo "<script>
+                    alert('Error al ejecutar la consulta: " . $e->getMessage() . "');
+                    window.location.href = '../pages/tabla.php'; // Redirige a la misma página
+                  </script>";
+        }
+    } else {
+        echo "<script>
+                alert('Error al establecer la conexión a la base de datos.');
+                window.location.href = '../pages/tabla.php'; // Redirige a la misma página
+              </script>";
+    }
+}
+
+// Uso de la función de eliminación
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $idCampo = $_GET['id'];
+    eliminarYacimiento($idCampo);
+}
+?>

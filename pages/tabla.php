@@ -49,9 +49,9 @@ if ($conexion) {
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="../pages/inicio.php">Inicio</a>
             </li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Trabajadores</li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Campos Petroleros</li>
           </ol>
-          <h6 class="font-weight-bolder text-white mb-0">Trabajadores</h6>
+          <h6 class="font-weight-bolder text-white mb-0">Campos Petroleros</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center"> </div>
@@ -72,21 +72,22 @@ if ($conexion) {
         <div class="col-12">
           <div class="card mb-4">
             <div class="card-header pb-0">
-              <h6>Lista de Trabajadores</h6>
+              <div class="d-flex align-items-center">
+                <p class="mb-0">Registro de Yacimientos!</p>
+                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Yacimiento.php">
+                <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
+              </div>
             </div>
+            <br>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">ID
-                      </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nombre
-                      </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
-                        Ubicación</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Fecha
-                        Descubrimiento</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">ID</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nombre</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Ubicación</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Fecha  Descubrimiento</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
                   </thead>
@@ -98,7 +99,11 @@ if ($conexion) {
                       echo "<td class='text-center text-xs' opacity-7'>{$fila['nombre_campo']}</td>";
                       echo "<td class='text-center text-xs' opacity-7'>{$fila['ubicacion']}</td>";
                       echo "<td class='text-center text-xs' opacity-7'>{$fila['fecha_descubrimiento']}</td>";
-                      echo "<td class='text-center text-xs' opacity-7'><a href='../crud/editar.php?id={$fila['id_campo_pk']}'>Editar</a> | <a href='eliminar.php?id={$fila['id_campo_pk']}'>Eliminar</a></td>";
+                      echo "<td class='text-center text-xs' opacity-7'>
+                      <a class='btn btn-link text-dark px-3 mb-0' href='../crud/editar.php?id={$fila['id_campo_pk']}'>
+                      <span class='fas fa-pencil-alt text-dark me-2'></span> Editar</a> | 
+                      <a class='btn btn-link text-danger text-gradient px-3 mb-0' href='../crud/eliminar.php?id={$fila['id_campo_pk']}'>
+                      <span  class='far fa-trash-alt me-2'></span>Eliminar</a></td>";
                       echo "</tr>";
                     }
                     ?>
@@ -109,8 +114,117 @@ if ($conexion) {
           </div>
         </div>
       </div>
-      <a class="btn btn-raised btn-primary btn-lg" href="../formularios/Yacimiento.php">
-        <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
+      
+<!-- ------------------------------TABLA POZO----------------- -->
+
+<div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <div class="d-flex align-items-center">
+                <p class="mb-0">Registro de Pozos</p>
+                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Yacimiento.php">
+                <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
+              </div>
+            </div>
+            <br>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">ID</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Yacimiento</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nombre</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Profundidad</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Estado</th>
+                      <th class="text-secondary opacity-7"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- ------------------------------------------------------ -->
+<!-- ------------------------------TABLA TRABAJADORES----------------- -->
+
+<div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <div class="d-flex align-items-center">
+                <p class="mb-0">Registro de los Trabajadores</p>
+                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Yacimiento.php">
+                <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
+              </div>
+            </div>
+            <br>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">ID</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nombre</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Apellido</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Tipo de Puesto</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Fecha contratacion</th>
+                      <th class="text-secondary opacity-7"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- ------------------------------------------------------ -->
+<!-- ------------------------------TABLA MATERIAL----------------- -->
+
+<div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <div class="d-flex align-items-center">
+                <p class="mb-0">Registro de Material</p>
+                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Yacimiento.php">
+                <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
+              </div>
+            </div>
+            <br>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">ID</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nombre</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Tipo de Material</th>
+                      <th class="text-secondary opacity-7"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- ------------------------------------------------------ -->
+
+
+
+
     </div>
   </main>
   <?php
