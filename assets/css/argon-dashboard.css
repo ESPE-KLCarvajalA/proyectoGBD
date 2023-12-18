@@ -23432,6 +23432,7 @@ hr.horizontal.gray-light {
 .navbar-vertical .navbar-brand .navbar-brand-img,
 .navbar-vertical .navbar-brand span {
   transition: all 0.2s ease-in-out;
+  color: rgb(94, 114, 228);
 }
 
 @media (prefers-reduced-motion: reduce) {

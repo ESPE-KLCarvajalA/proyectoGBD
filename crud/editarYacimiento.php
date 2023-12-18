@@ -1,4 +1,6 @@
 <?php
+//editarYacimiento.php
+
 include_once '../formularios/Conexion.php';
 
 // Verifica si se ha enviado un ID válido por GET
@@ -85,9 +87,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                     <input class="form-control" type="date" name="fechaDescubrimiento" id="fechaDes"  value="<?= $yacimiento['fecha_descubrimiento'] ?>">
                                                 </div>
                                             </div>
-                                            <div class="boton">
+                                            <div class="boton" href="../pages/tabla.php">
                                                 <input class="btn btn-primary btn-sm ms-auto" onclick="guardarPerfil()"
-                                                    type="submit" name="submit" value="Guardar cambios">
+                                                    type="submit" name="submit" value="Actualizar">
                                             </div>
                                         </form>
                                     </div>
@@ -112,8 +114,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             }
                         }
                     </script>
-
-                    </form>
                 </div>
                 </div>
                 </div>

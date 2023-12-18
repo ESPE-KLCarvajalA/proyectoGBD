@@ -7,8 +7,13 @@ include_once '../formularios/Conexion.php';
 $conexion = Cconexion::ConexionBD();
 
 if ($conexion) {
-  $sql = "SELECT * FROM Yacimiento";
-  $result = $conexion->query($sql);
+  // Obtener datos de Yacimiento
+  $sqlYacimiento = "SELECT * FROM Yacimiento";
+  $resultYacimiento = $conexion->query($sqlYacimiento);
+
+  // Muestra datos de Pozo
+  $sqlPozo = "SELECT * FROM Pozo";
+  $resultPozo = $conexion->query($sqlPozo);
 } else {
   echo "Error al establecer la conexión a la base de datos.";
 }
@@ -68,6 +73,8 @@ if ($conexion) {
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
+<!-- ------------------------------TABLA YACIMIENTO----------------- -->
+
       <div class="row">
         <div class="col-12">
           <div class="card mb-4">
@@ -93,16 +100,16 @@ if ($conexion) {
                   </thead>
                   <tbody>
                     <?php
-                    while ($fila = $result->fetch(PDO::FETCH_ASSOC)) {
+                    while ($filaYacimiento = $resultYacimiento->fetch(PDO::FETCH_ASSOC)) {
                       echo "<tr>";
-                      echo "<td class='text-center text-xs'>{$fila['id_campo_pk']}</td>";
-                      echo "<td class='text-center text-xs' opacity-7'>{$fila['nombre_campo']}</td>";
-                      echo "<td class='text-center text-xs' opacity-7'>{$fila['ubicacion']}</td>";
-                      echo "<td class='text-center text-xs' opacity-7'>{$fila['fecha_descubrimiento']}</td>";
+                      echo "<td class='text-center text-xs'>{$filaYacimiento['id_campo_pk']}</td>";
+                      echo "<td class='text-center text-xs' opacity-7'>{$filaYacimiento['nombre_campo']}</td>";
+                      echo "<td class='text-center text-xs' opacity-7'>{$filaYacimiento['ubicacion']}</td>";
+                      echo "<td class='text-center text-xs' opacity-7'>{$filaYacimiento['fecha_descubrimiento']}</td>";
                       echo "<td class='text-center text-xs' opacity-7'>
-                      <a class='btn btn-link text-dark px-3 mb-0' href='../crud/editar.php?id={$fila['id_campo_pk']}'>
+                      <a class='btn btn-link text-dark px-3 mb-0' href='../crud/editarYacimiento.php?id={$filaYacimiento['id_campo_pk']}'>
                       <span class='fas fa-pencil-alt text-dark me-2'></span> Editar</a> | 
-                      <a class='btn btn-link text-danger text-gradient px-3 mb-0' href='../crud/eliminar.php?id={$fila['id_campo_pk']}'>
+                      <a class='btn btn-link text-danger text-gradient px-3 mb-0' href='../crud/eliminar.php?id={$filaYacimiento['id_campo_pk']}'>
                       <span  class='far fa-trash-alt me-2'></span>Eliminar</a></td>";
                       echo "</tr>";
                     }
@@ -123,7 +130,7 @@ if ($conexion) {
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
                 <p class="mb-0">Registro de Pozos</p>
-                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Yacimiento.php">
+                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Pozo.php">
                 <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
               </div>
             </div>
@@ -142,7 +149,22 @@ if ($conexion) {
                     </tr>
                   </thead>
                   <tbody>
-                    
+                  <?php
+                  while ($filaPozo = $resultPozo->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<tr>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['id_pozo_pk']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['id_campo_fk']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['nombre']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['profundidad']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['estado']}</td>";
+                    echo "<td class='text-center text-xs'>
+                          <a class='btn btn-link text-dark px-3 mb-0' href='../crud/editarPozo.php?id={$filaPozo['id_pozo_pk']}'>
+                          <span class='fas fa-pencil-alt text-dark me-2'></span> Editar</a> | 
+                          <a class='btn btn-link text-danger text-gradient px-3 mb-0' href='../crud/eliminar.php?idPozo={$filaPozo['id_pozo_pk']}'>
+                          <span class='far fa-trash-alt me-2'></span>Eliminar</a></td>";
+                    echo "</tr>";
+                  }
+                  ?>
                   </tbody>
                 </table>
               </div>

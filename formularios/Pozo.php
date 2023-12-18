@@ -3,12 +3,13 @@ include_once '../crud/insertar.php'; // Ajusta la ruta según tu estructura de a
 
 // CREATE
 if (isset($_POST['submit'])) {
-  $nombreCampo = $_POST['nombreCampo'];
-  $ubicacion = $_POST['ubicacion'];
-  $fechaDescubrimiento = $_POST['fechaDescubrimiento'];
+  $idCampo = $_POST['idCampo'];
+  $nombre = $_POST['nombre'];
+  $profundidad = $_POST['profundidad'];
+  $estado = $_POST['estado'];
 
   // Llama a la función de inserción
-  insertarYacimiento($nombreCampo, $ubicacion, $fechaDescubrimiento);
+  insertarPozo($idCampo, $nombre, $profundidad, $estado);
 }
 
 // READ
@@ -16,14 +17,12 @@ if (isset($_POST['submit'])) {
 $conexion = Cconexion::ConexionBD();
 
 if ($conexion) {
-  $sql = "EXEC sp_GetYacimiento";
+  $sql = "EXEC sp_GetPozo";
   $result = $conexion->query($sql);
 } else {
   echo "Error al establecer la conexión a la base de datos.";
 }
 ?>
-
-
 
 
 
@@ -68,50 +67,65 @@ if ($conexion) {
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
                 <p class="mb-0">¡Agregar un nuevo Pozo!</p>
-                <!-- <button class="btn btn-primary btn-sm ms-auto" onclick="guardarPerfil()">Guardar</button> -->
               </div>
             </div>
             <div class="card-body">
-              <form id="frmAgrega" class="row" method="post" action="Yacimiento.php" onsubmit="return guardarPerfil()">
+              <form id="frmAgrega" class="row" method="post" action="Pozo.php" onsubmit="return guardarPerfil()">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="nombreCampo" class="form-control-label">Nombre del Yacimiento:</label>
-                    <input class="form-control" type="text" name="nombreCampo" id="nombreCampo">
+                    <label for="idCampo" class="form-control-label">ID del Yacimiento:</label>
+                    <input class="form-control" type="text" name="idCampo" id="idCampo">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="ubicacion" class="form-control-label">Ubicación:</label>
-                    <input class="form-control" type="text" name="ubicacion" id="ubicacion">
+                    <label for="nombre" class="form-control-label">Nombre del Pozo:</label>
+                    <input class="form-control" type="text" name="nombre" id="nombre">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="fechaDes" class="form-control-label">Fecha de descubrimiento:</label>
-                    <input class="form-control" type="date" name="fechaDescubrimiento" id="fechaDes">
+                    <label for="profundidad" class="form-control-label">Profundidad:</label>
+                    <input class="form-control" type="number" step="any" name="profundidad" id="profundidad">
                   </div>
                 </div>
-                
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="estado" class="form-control-label">Estado:</label>
+                    <select class="form-control" name="estado" id="estado">
+                      <option value="A">Activo</option>
+                      <option value="I">Inactivo</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="boton">
+                  <input class="btn btn-primary btn-sm ms-auto" type="submit" name="submit" value="Agregar">
+                </div>
                 <script>
                   function guardarPerfil() {
                     // Obtiene valores de los campos
-                    var nombreCampo = document.getElementById("nombreCampo").value;
-                    var ubicacion = document.getElementById("ubicacion").value;
-                    var fechaDes = document.getElementById("fechaDes").value;
+                    var nombreCampo = document.getElementById("idCampo").value;
+                    var ubicacion = document.getElementById("nombre").value;
+                    var profundidad = document.getElementById("profundidad").value;
+                    var estado = document.getElementById("estado").value;
 
                     // Verifica si los campos están vacíos
-                    if (nombreCampo === "" || ubicacion === "" || fechaDes === "") {
+                    if (idCampo === "" || nombre === "" || profundidad === "" || estado === "") {
                       alert("Por favor, complete todos los campos antes de guardar.");
                       return false; // Evita que el formulario se envíe si hay campos vacíos
                     } else {
-                      return true; // Permite que el formulario se envíe si todos los campos están llenos
+                      // Verifica si la profundidad es un número
+                      if (isNaN(profundidad)) {
+                        alert("La profundidad debe ser un número válido.");
+                        return false; // Evita que el formulario se envíe si la profundidad no es un número
+                      }
+
+                      // Aquí puedes agregar más validaciones según sea necesario
+
+                      return true; // Permite que el formulario se envíe si todos los campos están llenos y la profundidad es un número
                     }
                   }
                 </script>
-                <div class="boton">
-                  <input class="btn btn-primary btn-sm ms-auto" type="submit" name="submit"
-                    value="Actualizar">
-                </div>
               </form>
             </div>
           </div>
