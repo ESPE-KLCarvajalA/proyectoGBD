@@ -33,7 +33,7 @@ if ($conexion) {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/logo/logo_1.png">
+  <link rel="icon" type="image/png" href="../assets/img/logo/logo_2.png">
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -58,8 +58,9 @@ if ($conexion) {
     style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
     <span class="mask bg-primary opacity-6"></span>
   </div>
-  <?php include '../elements/aside.php'; ?>
   <div class="main-content position-relative max-height-vh-100 h-100">
+    <?php include '../elements/navbar.php'; ?>
+  <main class="main-content position-relative border-radius-lg ">
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-md-12">
@@ -67,6 +68,8 @@ if ($conexion) {
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
                 <p class="mb-0">¡Agregar un nuevo Pozo!</p>
+                <button class="btn btn-primary btn-sm ms-auto">
+                  <a href="../pages/tabla.php">Regresar</a></button>
               </div>
             </div>
             <div class="card-body">
@@ -132,6 +135,8 @@ if ($conexion) {
         </div>
       </div>
     </div>
+    <?php include('../elements/footer.php'); ?>
+  </main>
   </div>
   <?php include '../elements/dependencias.php'; ?>
 </body>

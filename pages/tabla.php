@@ -8,12 +8,20 @@ $conexion = Cconexion::ConexionBD();
 
 if ($conexion) {
   // Obtener datos de Yacimiento
-  $sqlYacimiento = "SELECT * FROM Yacimiento";
+  $sqlYacimiento = "exec sp_GetYacimiento";
   $resultYacimiento = $conexion->query($sqlYacimiento);
 
   // Muestra datos de Pozo
-  $sqlPozo = "SELECT * FROM Pozo";
+  $sqlPozo = "select * from vw_Pozo ";
   $resultPozo = $conexion->query($sqlPozo);
+
+  // Muestra datos de Pozo
+  $sqlTrabajador = "Select * from vw_Trabajador";
+  $resultTrabajador = $conexion->query($sqlTrabajador);
+
+    // Muestra datos de Material
+  $sqlMaterial = "Select * from vw_Material";
+  $resultMaterial = $conexion->query($sqlMaterial);
 } else {
   echo "Error al establecer la conexión a la base de datos.";
 }
@@ -26,7 +34,7 @@ if ($conexion) {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/logo/logo_1.png">
+  <link rel="icon" type="image/png" href="../assets/img/logo/logo_2.png">
   <title>PetroCaSa</title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -41,36 +49,18 @@ if ($conexion) {
 
 
 </head>
-
+<style>
+    .table-container {
+      max-height: 200px; /* Altura máxima del contenedor de la tabla */
+      overflow-y: auto; /* Agrega un scrollbar vertical si es necesario */
+    }
+  </style>
 <body class="g-sidenav-show   bg-gray-100">
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <?php include '../elements/aside.php'; ?>
   <main class="main-content position-relative border-radius-lg ">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur"
-      data-scroll="false">
-      <div class="container-fluid py-1 px-3">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="../pages/inicio.php">Inicio</a>
-            </li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Campos Petroleros</li>
-          </ol>
-          <h6 class="font-weight-bolder text-white mb-0">Campos Petroleros</h6>
-        </nav>
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center"> </div>
-          <ul class="navbar-nav  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="nav-link text-white font-weight-bold px-0">
-                <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">Inicio Sesión</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <?php include '../elements/navbar.php'; ?>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
 <!-- ------------------------------TABLA YACIMIENTO----------------- -->
@@ -87,7 +77,7 @@ if ($conexion) {
             </div>
             <br>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
+              <div class="table-responsive p-0 table-container" >
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
@@ -136,7 +126,7 @@ if ($conexion) {
             </div>
             <br>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
+              <div class="table-responsive p-0 table-container">
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
@@ -152,15 +142,15 @@ if ($conexion) {
                   <?php
                   while ($filaPozo = $resultPozo->fetch(PDO::FETCH_ASSOC)) {
                     echo "<tr>";
-                    echo "<td class='text-center text-xs'>{$filaPozo['id_pozo_pk']}</td>";
-                    echo "<td class='text-center text-xs'>{$filaPozo['id_campo_fk']}</td>";
-                    echo "<td class='text-center text-xs'>{$filaPozo['nombre']}</td>";
-                    echo "<td class='text-center text-xs'>{$filaPozo['profundidad']}</td>";
-                    echo "<td class='text-center text-xs'>{$filaPozo['estado']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['IdPozo']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['NombreCampo']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['NombrePozo']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['Profundidad']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaPozo['Estado']}</td>";
                     echo "<td class='text-center text-xs'>
-                          <a class='btn btn-link text-dark px-3 mb-0' href='../crud/editarPozo.php?id={$filaPozo['id_pozo_pk']}'>
+                          <a class='btn btn-link text-dark px-3 mb-0' href='../crud/editarPozo.php?id={$filaPozo['IdPozo']}'>
                           <span class='fas fa-pencil-alt text-dark me-2'></span> Editar</a> | 
-                          <a class='btn btn-link text-danger text-gradient px-3 mb-0' href='../crud/eliminar.php?idPozo={$filaPozo['id_pozo_pk']}'>
+                          <a class='btn btn-link text-danger text-gradient px-3 mb-0' href='../crud/eliminar.php?idPozo={$filaPozo['IdPozo']}'>
                           <span class='far fa-trash-alt me-2'></span>Eliminar</a></td>";
                     echo "</tr>";
                   }
@@ -181,13 +171,13 @@ if ($conexion) {
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
                 <p class="mb-0">Registro de los Trabajadores</p>
-                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Yacimiento.php">
+                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Trabajador.php">
                 <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
               </div>
             </div>
             <br>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
+              <div class="table-responsive p-0 table-container">
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
@@ -200,7 +190,22 @@ if ($conexion) {
                     </tr>
                   </thead>
                   <tbody>
-                    
+                  <?php
+                  while ($filaTrabajador = $resultTrabajador->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<tr>";
+                    echo "<td class='text-center text-xs'>{$filaTrabajador['id_trabajador_pk']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaTrabajador['nombre']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaTrabajador['apellido']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaTrabajador['cargo']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaTrabajador['fecha_contratacion']}</td>";
+                    echo "<td class='text-center text-xs'>
+                          <a class='btn btn-link text-dark px-3 mb-0' href='../crud/editarTrabajador.php?id={$filaTrabajador['id_trabajador_pk']}'>
+                          <span class='fas fa-pencil-alt text-dark me-2'></span> Editar</a> | 
+                          <a class='btn btn-link text-danger text-gradient px-3 mb-0' href='../crud/eliminar.php?idTrabajador={$filaTrabajador['id_trabajador_pk']}'>
+                          <span class='far fa-trash-alt me-2'></span>Eliminar</a></td>";
+                    echo "</tr>";
+                  }
+                  ?>
                   </tbody>
                 </table>
               </div>
@@ -217,13 +222,11 @@ if ($conexion) {
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
                 <p class="mb-0">Registro de Material</p>
-                <a class="btn btn-primary btn-sm ms-auto" href="../formularios/Yacimiento.php">
-                <span class="fa fa-plus-circle"></span>Agregar nuevo</a>
               </div>
             </div>
             <br>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
+              <div class="table-responsive p-0 table-container">
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
@@ -234,7 +237,15 @@ if ($conexion) {
                     </tr>
                   </thead>
                   <tbody>
+                  <?php
+                  while ($filaMaterial = $resultMaterial->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<tr>";
+                    echo "<td class='text-center text-xs'>{$filaMaterial['IdMaterial']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaMaterial['NombreMaterial']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaMaterial['TipoMaterial']}</td>";
                     
+                  }
+                  ?>
                   </tbody>
                 </table>
               </div>
@@ -248,6 +259,7 @@ if ($conexion) {
 
 
     </div>
+    <?php include '../elements/footer.php';?>
   </main>
   <?php
   include '../elements/dependencias.php';

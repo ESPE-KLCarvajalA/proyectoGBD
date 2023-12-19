@@ -95,6 +95,51 @@ function eliminarPozo($idPozo)
     }
 }
 
+function eliminarTrabajador($idTrabajador)
+{
+    $conexion = Cconexion::ConexionBD();
+
+    if ($conexion) {
+        try {
+            $sql = "EXEC sp_DeleteTrabajador @IdTrabajador=?";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(1, $idTrabajador, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $rowCount = $stmt->rowCount();
+
+            if ($rowCount > 0) {
+                echo "<script>
+                        alert('Registro de trabajador eliminado correctamente.');
+                        window.location.href = '../pages/tabla.php';
+                      </script>";
+            } else {
+                echo "<script>
+                        alert('No se encontró el registro de trabajador para eliminar.');
+                        window.location.href = '../pages/tabla.php';
+                      </script>";
+            }
+        } catch (PDOException $e) {
+            echo "<script>
+                    alert('Error al ejecutar la consulta: " . $e->getMessage() . "');
+                    window.location.href = '../pages/tabla.php';
+                  </script>";
+        }
+    } else {
+        echo "<script>
+                alert('Error al establecer la conexión a la base de datos.');
+                window.location.href = '../pages/tabla.php';
+              </script>";
+    }
+}
+
+
+if (isset($_GET['idTrabajador']) && is_numeric($_GET['idTrabajador'])) {
+    $idTrabajador = $_GET['idTrabajador'];
+    eliminarTrabajador($idTrabajador);
+}
+
+
 // Uso de la función de eliminación de Yacimiento
 if (isset($_GET['idYacimiento']) && is_numeric($_GET['idYacimiento'])) {
     $idYacimiento = $_GET['idYacimiento'];
@@ -106,4 +151,6 @@ if (isset($_GET['idPozo']) && is_numeric($_GET['idPozo'])) {
     $idPozo = $_GET['idPozo'];
     eliminarPozo($idPozo);
 }
+
+
 ?>

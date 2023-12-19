@@ -10486,6 +10486,7 @@ fieldset:disabled .btn {
 
 .text-uppercase {
   text-transform: uppercase !important;
+  color: #ecf0f6;
 }
 
 .text-capitalize {
@@ -10548,7 +10549,7 @@ fieldset:disabled .btn {
 }
 
 .text-muted {
-  color: #6c757d !important;
+  color: #ecf0f6 !important;
 }
 
 .text-black-50 {
@@ -10580,7 +10581,7 @@ fieldset:disabled .btn {
 }
 
 .bg-primary {
-  background-color: #5e72e4 !important;
+  background-color: #344767 !important;
 }
 
 .bg-secondary {
@@ -23432,7 +23433,7 @@ hr.horizontal.gray-light {
 .navbar-vertical .navbar-brand .navbar-brand-img,
 .navbar-vertical .navbar-brand span {
   transition: all 0.2s ease-in-out;
-  color: rgb(94, 114, 228);
+  color: #344767;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -25025,7 +25026,7 @@ p {
 }
 
 .text-muted {
-  color: #67748e !important;
+  color: #d1dae8 !important;
 }
 
 .text-black-50 {
