@@ -89,7 +89,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             </div>
                                             <div class="boton" href="../pages/tabla.php">
                                                 <input class="btn btn-primary btn-sm ms-auto" onclick="guardarPerfil()"
-                                                    type="submit" name="submit" value="Agregar">
+                                                    type="submit" name="submit" value="Actualizar">
                                             </div>
                                         </form>
                                     </div>

@@ -284,6 +284,7 @@ BEGIN
     VALUES (@IdCampo, @Nombre, @Profundidad, @Estado);
 END;
 
+--read
 CREATE PROCEDURE sp_GetPozo
 AS
 BEGIN
@@ -351,6 +352,8 @@ INNER JOIN Trabajador t ON g.id_asignacion_pk = t.id_asignacion_fk
 LEFT JOIN Material m ON g.id_asignacion_pk = m.id_asignacion_fk
 JOIN Extraccion E ON E.id_asignacion_fk=g.id_asignacion_pk
 
+select * from vw_AsignacionTrabajador;
+
 --Vista extracciones
 CREATE VIEW vw_ExtraccionConGrupos AS
 SELECT E.id_extraccion_pk, P.nombre,Y.nombre_campo,G.nombre_grupo,E.fecha_extraccion,E.volumen_extraido,
@@ -360,7 +363,7 @@ JOIN Pozo P ON P.id_pozo_pk=E.id_pozo_fk
 JOIN Grupo G ON G.id_asignacion_pk=E.id_asignacion_fk
 JOIN Yacimiento Y ON Y.id_campo_pk=P.id_campo_fk
 
-
+select * from vw_ExtraccionConGrupos;
 --------------------------------------Vistas que aún no se ejecutan
 
 

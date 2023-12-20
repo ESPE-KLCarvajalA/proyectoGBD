@@ -74,7 +74,7 @@ if ($conexion) {
                     </div>
                   </div>
                   <div class="boton">
-                    <input class="btn btn-primary btn-sm ms-auto" type="submit" name="submit" value="Actualizar">
+                    <input class="btn btn-primary btn-sm ms-auto" type="submit" name="submit" value="Agregar">
                   </div>
                   <script>
                     function guardarPerfil() {
