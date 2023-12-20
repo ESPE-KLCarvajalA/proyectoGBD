@@ -179,22 +179,6 @@ BEGIN
     VALUES (@Nombre, @Apellido, @IdAsignacion, @IdTipoCargo, @FechaContratacion);
 END;
 
--- READ
-CREATE PROCEDURE sp_GetTrabajadores
-AS
-BEGIN
-    SELECT * FROM Trabajador;
-END;
-
---READ ID
-CREATE PROCEDURE sp_GetTrabajadorById
-    @IdTrabajador INT
-AS
-BEGIN
-    SELECT * FROM Trabajador
-    WHERE id_trabajador_pk = @IdTrabajador;
-END;
-
 --UPDATE
 CREATE PROCEDURE sp_UpdateTrabajador
     @IdTrabajador INT,
@@ -232,35 +216,6 @@ AS
 BEGIN
     INSERT INTO Material (nombre, id_tipo_material_fk)
     VALUES (@Nombre, @IdTipoMaterial);
-END;
-
---READ
-CREATE PROCEDURE sp_GetMaterial
-AS
-BEGIN
-    SELECT * FROM Material;
-END;
-
---UPDATE
-CREATE PROCEDURE sp_UpdateMaterial
-    @IdMaterial INT,
-    @Nombre VARCHAR(50),
-    @IdTipoMaterial INT
-AS
-BEGIN
-    UPDATE Material
-    SET nombre = @Nombre,
-        id_tipo_material_fk = @IdTipoMaterial
-    WHERE id_material_pk = @IdMaterial;
-END;
-
---DELETE
-CREATE PROCEDURE sp_DeleteMaterial
-    @IdMaterial INT
-AS
-BEGIN
-    DELETE FROM Material
-    WHERE id_material_pk = @IdMaterial;
 END;
 
 --------------------------------------------------------------Procedimientos almacenados para Yacimiento:
@@ -318,13 +273,6 @@ BEGIN
     VALUES (@IdCampo, @Nombre, @Profundidad, @Estado);
 END;
 
--- READ
-CREATE PROCEDURE sp_GetPozo
-AS
-BEGIN
-    SELECT * FROM Pozo;
-END;
-
 -- UPDATE
 CREATE PROCEDURE sp_UpdatePozo
     @IdPozo INT,
@@ -350,45 +298,6 @@ BEGIN
     DELETE FROM Pozo
     WHERE id_pozo_pk = @IdPozo;
 END;
-----------------------------------------------------------Procedimientos almacenados para Extraccion:
---CREATE
-CREATE PROCEDURE sp_InsertExtraccion
-    @IdPozo INT,
-    @IdAsignacion INT,
-    @FechaExtraccion DATE,
-    @VolumenExtraido DECIMAL
-AS
-BEGIN
-    INSERT INTO Extraccion (id_pozo_fk, id_asignacion_fk, fecha_extraccion, volumen_extraido)
-    VALUES (@IdPozo, @IdAsignacion, @FechaExtraccion, @VolumenExtraido);
-END;
-
--- UPDATE
-CREATE PROCEDURE sp_UpdateExtraccion
-    @IdExtraccion INT,
-    @IdPozo INT,
-    @IdAsignacion INT,
-    @FechaExtraccion DATE,
-    @VolumenExtraido DECIMAL
-AS
-BEGIN
-    UPDATE Extraccion
-    SET id_pozo_fk = @IdPozo,
-        id_asignacion_fk = @IdAsignacion,
-        fecha_extraccion = @FechaExtraccion,
-        volumen_extraido = @VolumenExtraido
-    WHERE id_extraccion_pk = @IdExtraccion;
-END;
-
--- DELETE
-CREATE PROCEDURE sp_DeleteExtraccion
-    @IdExtraccion INT
-AS
-BEGIN
-    DELETE FROM Extraccion
-    WHERE id_extraccion_pk = @IdExtraccion;
-END;
-
 /*----------------------------------------------------------------------------------------------
 												VISTAS
 ------------------------------------------------------------------------------------------------*/
