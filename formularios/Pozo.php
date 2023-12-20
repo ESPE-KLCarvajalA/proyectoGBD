@@ -60,83 +60,84 @@ if ($conexion) {
   </div>
   <div class="main-content position-relative max-height-vh-100 h-100">
     <?php include '../elements/navbar.php'; ?>
-  <main class="main-content position-relative border-radius-lg ">
-    <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header pb-0">
-              <div class="d-flex align-items-center">
-                <p class="mb-0">¡Agregar un nuevo Pozo!</p>
-                <button class="btn btn-primary btn-sm ms-auto">
-                  <a href="../pages/tabla.php">Regresar</a></button>
+    <main class="main-content position-relative border-radius-lg ">
+      <div class="container-fluid py-4">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header pb-0">
+                <div class="d-flex align-items-center">
+                  <p class="mb-0">¡Agregar un nuevo Pozo!</p>
+                  <button class="btn btn-primary btn-sm ms-auto">
+                    <a href="../pages/tabla.php">Regresar</a></button>
+                </div>
               </div>
-            </div>
-            <div class="card-body">
-              <form id="frmAgrega" class="row" method="post" action="Pozo.php" onsubmit="return guardarPerfil()">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="idCampo" class="form-control-label">ID del Yacimiento:</label>
-                    <input class="form-control" type="text" name="idCampo" id="idCampo">
+              <div class="card-body">
+                <form id="frmAgrega" class="row" method="post" action="Pozo.php" onsubmit="return guardarPerfil()">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="idCampo" class="form-control-label">ID del Yacimiento:</label>
+                      <input class="form-control" type="text" name="idCampo" id="idCampo">
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="nombre" class="form-control-label">Nombre del Pozo:</label>
-                    <input class="form-control" type="text" name="nombre" id="nombre">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="nombre" class="form-control-label">Nombre del Pozo:</label>
+                      <input class="form-control" type="text" name="nombre" id="nombre">
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="profundidad" class="form-control-label">Profundidad:</label>
-                    <input class="form-control" type="number" step="any" name="profundidad" id="profundidad">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="profundidad" class="form-control-label">Profundidad:</label>
+                      <input class="form-control" type="number" step="any" name="profundidad" id="profundidad">
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="estado" class="form-control-label">Estado:</label>
-                    <select class="form-control" name="estado" id="estado">
-                      <option value="A">Activo</option>
-                      <option value="I">Inactivo</option>
-                    </select>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="estado" class="form-control-label">Estado:</label>
+                      <select class="form-control" name="estado" id="estado">
+                        <option value="A">Activo</option>
+                        <option value="I">Inactivo</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div class="boton">
-                  <input class="btn btn-primary btn-sm ms-auto" type="submit" name="submit" value="Agregar">
-                </div>
-                <script>
-                  function guardarPerfil() {
-                    // Obtiene valores de los campos
-                    var nombreCampo = document.getElementById("idCampo").value;
-                    var ubicacion = document.getElementById("nombre").value;
-                    var profundidad = document.getElementById("profundidad").value;
-                    var estado = document.getElementById("estado").value;
+                  <div class="boton">
+                    <input class="btn btn-primary btn-sm ms-auto" type="submit" name="submit" value="Agregar">
+                  </div>
+                  <script>
+                    function guardarPerfil() {
+                      // Obtiene valores de los campos
+                      var idCampo = document.getElementById("idCampo").value;
+                      var nombre = document.getElementById("nombre").value;
+                      var profundidad = document.getElementById("profundidad").value;
+                      var estado = document.getElementById("estado").value;
 
-                    // Verifica si los campos están vacíos
-                    if (idCampo === "" || nombre === "" || profundidad === "" || estado === "") {
-                      alert("Por favor, complete todos los campos antes de guardar.");
-                      return false; // Evita que el formulario se envíe si hay campos vacíos
-                    } else {
-                      // Verifica si la profundidad es un número
-                      if (isNaN(profundidad)) {
-                        alert("La profundidad debe ser un número válido.");
-                        return false; // Evita que el formulario se envíe si la profundidad no es un número
+                      // Verifica si los campos están vacíos
+                      if (idCampo === "" || nombre === "" || profundidad === "" || estado === "") {
+                        alert("Por favor, complete todos los campos antes de guardar.");
+                        return false; // Evita que el formulario se envíe si hay campos vacíos
+                      } else {
+                        // Verifica si la profundidad es un número y no es negativa
+                        if (isNaN(profundidad) || profundidad < 0) {
+                          alert("La profundidad debe ser un número válido y no puede ser negativa.");
+                          return false; // Evita que el formulario se envíe si la profundidad no es válida
+                        }
+
+                        // Aquí puedes agregar más validaciones según sea necesario
+
+                        return true; // Permite que el formulario se envíe si todos los campos están llenos y la profundidad es válida
                       }
-
-                      // Aquí puedes agregar más validaciones según sea necesario
-
-                      return true; // Permite que el formulario se envíe si todos los campos están llenos y la profundidad es un número
                     }
-                  }
-                </script>
-              </form>
+                  </script>
+
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <?php include('../elements/footer.php'); ?>
-  </main>
+      <?php include('../elements/footer.php'); ?>
+    </main>
   </div>
   <?php include '../elements/dependencias.php'; ?>
 </body>
