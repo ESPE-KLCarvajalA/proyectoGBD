@@ -67,7 +67,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <form action="proceso_editar.php" method="post">
+                                        <form action="proceso_editar_Yacimiento.php" method="post">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                 <input type="hidden" name="idCampo" value="<?= $yacimiento['id_campo_pk'] ?>">
