@@ -38,7 +38,7 @@
                 <div class="card-body">
                   <form role="form" method="post" action="../login/autenticar.php">
                     <div class="mb-3">
-                      <input type="text" class="form-control form-control-lg" placeholder="text" aria-label="text" name="correo">
+                      <input type="text" class="form-control form-control-lg" placeholder="Usuario" aria-label="text" name="correo">
                     </div>
                     <div class="mb-3">
                       <input type="password" class="form-control form-control-lg" placeholder="Contraseña" aria-label="Password" name="contrasena">
