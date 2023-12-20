@@ -15,21 +15,14 @@ create table TipoMaterial (
    constraint pk_tipomaterial primary key (id_tipo_material_pk)
 );
 
-create table Grupo (
-   id_asignacion_pk int  identity(1,1) not null,
-   nombre_grupo varchar(15) not null,
-   constraint pk_asignaciontrabajador primary key (id_asignacion_pk),
-);
-
-
-CREATE table Material (
+drop table Material (
    id_material_pk int identity(1,1) not null,
    nombre  varchar(50) null,
    id_tipo_material_fk  int not null,
    id_asignacion_fk int null,
    constraint pk_materiales primary key (id_material_pk),
-   constraint fk_material_refernces_tipoma foreign key(id_tipo_material_fk) references TipoMaterial(id_tipo_material_pk),
-   constraint fk_material_refernces_grupo foreign key(id_asignacion_fk) references Grupo (id_asignacion_pk)
+   constraint fk_material_refernces_tipoma foreign key(id_tipo_material_fk) references TipoMaterial(id_tipo_material_pk)
+   constraint fk_material_refernces_grupo foreign key(id_asignacion_fk) references Grupo (id_asignacion_fk)
 );
 create table Trabajador (
    id_trabajador_pk  int identity(1,1) not null,
@@ -43,6 +36,11 @@ create table Trabajador (
    constraint fk_trabajador_references_grupo FOREIGN KEY (id_asignacion_fk) REFERENCES Grupo (id_asignacion_pk)
 );
 
+create table Grupo (
+   id_asignacion_pk int  identity(1,1) not null,
+   nombre_grupo varchar(15) not null,
+   constraint pk_asignaciontrabajador primary key (id_asignacion_pk),
+);
 
 create table Yacimiento (
    id_campo_pk  int identity(1,1) not null,
@@ -118,6 +116,7 @@ END;
 
 insert into TipoCargo values('Logístico'),('Especialista'),('Gerente'),('Analista'),('Operador de Excavación'),('Operador de Maquinaria'),('Administrador');
 insert into TipoMaterial values('Herramientas de Excavación'),('Maquinaria vehicular');
+insert into Usuario values ('admin','admin',6);
 
 -- Insertar datos en la tabla Material
 insert into Material values ('Martillo neumático', 1,1),('Excavadora de orugas', 2,1),('Pala mecánica', 2,2),
@@ -131,8 +130,6 @@ insert into Trabajador (nombre, apellido, id_tipo_cargo_fk, fecha_contratacion,i
     ('Elena', 'Martínez', 4, '2023-04-20',3), -- Analista
     ('Roberto', 'López', 5, '2023-05-05',2),-- Operador de Excavación
 	('kiara', 'Carvajal', 6, '2015-04-15',1); --Administrador 
-
-insert into Usuario values ('admin','admin',6);
 
 -- Insertar datos en la tabla Grupo
 insert into Grupo values
@@ -382,3 +379,22 @@ EXEC sp_UpdateTrabajador
     @IdAsignacion = @IdAsignacionNuevo,
     @IdTipoCargo = @IdTipoCargoNuevo,
     @FechaContratacion = @FechaContratacionNueva;
+
+
+
+----Procedimiento Buscar
+CREATE PROCEDURE sp_GetPozoBusqueda
+    @searchTerm NVARCHAR(100)
+AS
+BEGIN
+    SELECT P.id_pozo_pk,P.nombre AS nombre_pozo,P.profundidad,P.estado,
+        Y.nombre_campo AS nombre_yacimiento,T.nombre AS nombre_trabajador
+    FROM Pozo P
+    LEFT JOIN Yacimiento Y ON P.id_campo_fk = Y.id_campo_pk
+    LEFT JOIN Extraccion E ON P.id_pozo_pk = E.id_pozo_fk
+    LEFT JOIN Grupo G ON E.id_asignacion_fk = G.id_asignacion_pk
+    LEFT JOIN Trabajador T ON G.id_asignacion_pk = T.id_asignacion_fk
+    WHERE P.nombre LIKE '%' + @searchTerm + '%' OR Y.nombre_campo LIKE '%' + @searchTerm + '%' OR
+        T.nombre LIKE '%' + @searchTerm + '%';
+END;
+
