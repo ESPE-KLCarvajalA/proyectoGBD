@@ -384,26 +384,14 @@ CREATE PROCEDURE sp_GetPozoBusqueda
     @searchTerm NVARCHAR(100)
 AS
 BEGIN
-    SELECT
-        P.id_pozo_pk,
-        P.nombre AS nombre_pozo,
-        P.profundidad,
-        P.estado,
-        Y.nombre_campo AS nombre_yacimiento,
-        T.nombre AS nombre_trabajador
-    FROM
-        Pozo P
-    LEFT JOIN
-        Yacimiento Y ON P.id_campo_fk = Y.id_campo_pk
-    LEFT JOIN
-        Extraccion E ON P.id_pozo_pk = E.id_pozo_fk
-    LEFT JOIN
-        Grupo G ON E.id_asignacion_fk = G.id_asignacion_pk
-    LEFT JOIN
-        Trabajador T ON G.id_asignacion_pk = T.id_asignacion_fk
-    WHERE
-        P.nombre LIKE '%' + @searchTerm + '%' OR
-        Y.nombre_campo LIKE '%' + @searchTerm + '%' OR
+    SELECT P.id_pozo_pk,P.nombre AS nombre_pozo,P.profundidad,P.estado,
+        Y.nombre_campo AS nombre_yacimiento,T.nombre AS nombre_trabajador
+    FROM Pozo P
+    LEFT JOIN Yacimiento Y ON P.id_campo_fk = Y.id_campo_pk
+    LEFT JOIN Extraccion E ON P.id_pozo_pk = E.id_pozo_fk
+    LEFT JOIN Grupo G ON E.id_asignacion_fk = G.id_asignacion_pk
+    LEFT JOIN Trabajador T ON G.id_asignacion_pk = T.id_asignacion_fk
+    WHERE P.nombre LIKE '%' + @searchTerm + '%' OR Y.nombre_campo LIKE '%' + @searchTerm + '%' OR
         T.nombre LIKE '%' + @searchTerm + '%';
 END;
 
