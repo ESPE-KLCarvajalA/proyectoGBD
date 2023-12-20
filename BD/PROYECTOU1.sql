@@ -1,19 +1,24 @@
-if exists (select * from sysdatabases where name='PROYECTOU1') drop database PROYECTOU1;
+if exists (select *
+from sysdatabases
+where name='PROYECTOU1') drop database PROYECTOU1;
 
 create database PROYECTOU1;
 use PROYECTOU1;
 
-create table TipoCargo (
-   id_tipo_cargo_pk int identity(1,1) not null,
-   cargo varchar(50) null,
-   constraint pk_tipocargo primary key (id_tipo_cargo_pk)
+create table TipoCargo
+(
+    id_tipo_cargo_pk int identity(1,1) not null,
+    cargo varchar(50) null,
+    constraint pk_tipocargo primary key (id_tipo_cargo_pk)
 );
 
-create table TipoMaterial (
-   id_tipo_material_pk  int identity(1,1) not null,
-   tipo_material        varchar(50) null,
-   constraint pk_tipomaterial primary key (id_tipo_material_pk)
+create table TipoMaterial
+(
+    id_tipo_material_pk int identity(1,1) not null,
+    tipo_material varchar(50) null,
+    constraint pk_tipomaterial primary key (id_tipo_material_pk)
 );
+<<<<<<< Updated upstream
 
 create table Material (
    id_material_pk int identity(1,1) not null,
@@ -40,15 +45,55 @@ create table Grupo (
    id_asignacion_pk int  identity(1,1) not null,
    nombre_grupo varchar(15) not null,
    constraint pk_asignaciontrabajador primary key (id_asignacion_pk),
+=======
+/*
+create table TipoReserva (
+   id_tipo_reserva_pk int identity(1,1) not null,
+   tipo_reserva varchar(50) null,
+   constraint pk_tiporeserva primary key (id_tipo_reserva_pk)
+);
+*/
+create table Material
+(
+    id_material_pk int identity(1,1) not null,
+    nombre varchar(50) null,
+    id_tipo_material_fk int not null,
+    constraint pk_materiales primary key (id_material_pk),
+    constraint fk_material_refernces_tipoma foreign key(id_tipo_material_fk) references TipoMaterial(id_tipo_material_pk)
 );
 
-create table Yacimiento (
-   id_campo_pk  int identity(1,1) not null,
-   nombre_campo varchar(50) null,
-   ubicacion varchar(50) null,
-   fecha_descubrimiento date,
-   constraint pk_yacimiento primary key (id_campo_pk)
+create table Trabajador
+(
+    id_trabajador_pk int identity(1,1) not null,
+    nombre varchar(50) null,
+    apellido varchar(50) null,
+    id_tipo_cargo_fk int null,
+    fecha_contratacion date null,
+    constraint fk_material_reference_tipomate foreign key (id_tipo_cargo_fk)references TipoCargo (id_tipo_cargo_pk),
+    constraint pk_trabajador primary key (id_trabajador_pk)
 );
+
+create table AsignacionTrabajador
+(
+    id_asignacion_pk int identity(1,1) not null,
+    id_trabajador_fk int not null,
+    id_material_fk int null,
+    n_horas_trabajo float,
+    constraint pk_asignaciontrabajador primary key (id_asignacion_pk),
+    constraint fk_asignaci_reference_material foreign key (id_material_fk)references Material (id_material_pk),
+    constraint fk_asignaci_reference_trabajad foreign key (id_trabajador_fk)references Trabajador (id_trabajador_pk)
+>>>>>>> Stashed changes
+);
+
+create table Yacimiento
+(
+    id_campo_pk int identity(1,1) not null,
+    nombre_campo varchar(50) null,
+    ubicacion varchar(50) null,
+    fecha_descubrimiento date,
+    constraint pk_yacimiento primary key (id_campo_pk)
+);
+<<<<<<< Updated upstream
 
 create table Pozo (
    id_pozo_pk           int identity(1,1) not null,
@@ -71,25 +116,65 @@ create table Extraccion (
    constraint pk_extraccion primary key (id_extraccion_pk),
    constraint fk_extraccion_references_pozo foreign key (id_pozo_fk) references Pozo (id_pozo_pk),
    constraint fk_extraccion_references_grupo foreign key (id_asignacion_fk) references Grupo (id_asignacion_pk)
+=======
+/*
+create table Reserva (
+   id_reserva_pk        int identity(1,1) not null,
+   id_campo_fk          int null,
+   fecha_registro       date null,
+   cantidad_reservada   decimal null,
+   id_tipo_reserva_fk   int null,
+   constraint pk_reserva primary key (id_reserva_pk),
+   constraint fk_reserva_references_yaci foreign key (id_campo_fk) references Yacimiento (id_campo_pk),
+   constraint fk_reserva_references_tiporeser foreign key (id_tipo_reserva_fk) references TipoReserva (id_tipo_reserva_pk)
+);
+*/
+create table Pozo
+(
+    id_pozo_pk int identity(1,1) not null,
+    id_campo_fk int null,
+    nombre varchar(50) null,
+    profundidad decimal null,
+    estado char(1) null,
+    constraint pk_pozo primary key (id_pozo_pk),
+    constraint fk_pozo_references_yaci foreign key (id_campo_fk) references Yacimiento (id_campo_pk)
+);
+alter table Pozo add constraint pozo_estado CHECK (estado IN ('A', 'I'));
+
+create table Extraccion
+(
+    id_extraccion_pk int identity(1,1) not null,
+    id_pozo_fk int null,
+    id_asignacion_fk int null,
+    fecha_extraccion date null,
+    volumen_extraido decimal null,
+    constraint pk_extraccion primary key (id_extraccion_pk),
+    constraint fk_extraccion_references_pozo foreign key (id_pozo_fk) references Pozo (id_pozo_pk),
+    constraint fk_extraccion_references_asig foreign key (id_asignacion_fk) references AsignacionTrabajador (id_asignacion_pk)
+>>>>>>> Stashed changes
 );
 
-create table Usuario(
-	id_usuario_pk int identity(1,1) not null,
-	usuario varchar(50) not null,
-	contrasena varchar(50) not null,
-	id_trabajador_fk int null,
-	constraint pk_usuario primary key (id_usuario_pk),
-	constraint u_nombre_usuario unique (usuario),
-	constraint fk_usuario_references_trabajador foreign key (id_trabajador_fk) references Trabajador (id_trabajador_pk)
+create table Usuario
+(
+    id_usuario_pk int identity(1,1) not null,
+    usuario varchar(50) not null,
+    contrasena varchar(50) not null,
+    id_trabajador_fk int null,
+    constraint pk_usuario primary key (id_usuario_pk),
+    constraint u_nombre_usuario unique (usuario),
+    constraint fk_usuario_references_trabajador foreign key (id_trabajador_fk) references Trabajador (id_trabajador_pk)
 );
 
 -- Después de insertar datos en Trabajador
 DECLARE @IdTrabajador INT;
 
-SELECT @IdTrabajador = SCOPE_IDENTITY(); -- Obtener el último id_trabajador_pk insertado
+SELECT @IdTrabajador = SCOPE_IDENTITY();
+-- Obtener el último id_trabajador_pk insertado
 
-DECLARE @InputUsuario VARCHAR(50) = 'admin'; -- Reemplaza con el nombre de usuario proporcionado por el usuario
-DECLARE @InputContrasena VARCHAR(50) = 'admin'; -- Reemplaza con la contraseña proporcionada por el usuario
+DECLARE @InputUsuario VARCHAR(50) = 'admin';
+-- Reemplaza con el nombre de usuario proporcionado por el usuario
+DECLARE @InputContrasena VARCHAR(50) = 'admin';
+-- Reemplaza con la contraseña proporcionada por el usuario
 
 DECLARE @TrabajadorId INT;
 
@@ -108,12 +193,13 @@ BEGIN
 END;
 
 
-    
+
 
 /*---------------------------------------------------
 				INSERCION DE DATOS
 ---------------------------------------------------*/
 
+<<<<<<< Updated upstream
 insert into Usuario values ('admin','admin',6);
 insert into TipoCargo values('Logístico'),('Especialista'),('Gerente'),('Analista'),('Operador de Excavación'),('Operador de Maquinaria'),('Administrador');
 insert into TipoMaterial values('Herramientas de Excavación'),('Maquinaria vehicular');
@@ -134,9 +220,67 @@ insert into Trabajador (nombre, apellido, id_tipo_cargo_fk, fecha_contratacion,i
 -- Insertar datos en la tabla Grupo
 insert into Grupo values
     ('Grupo 1'), ('Grupo 2'),('Grupo 3');
+=======
+insert into Usuario
+values
+    ('admin', 'admin', 6);
+insert into TipoCargo
+values('Logístico'),
+    ('Especialista'),
+    ('Gerente'),
+    ('Analista'),
+    ('Operador de Excavación'),
+    ('Operador de Maquinaria'),
+    ('Administrador');
+insert into TipoMaterial
+values('Herramientas de Excavación'),
+    ('Maquinaria vehicular');
+
+-- Insertar datos en la tabla Material
+insert into Material
+values
+    ('Martillo neumático', 1),
+    ('Excavadora de orugas', 2),
+    ('Pala mecánica', 2),
+    ('Taladro rotativo', 1),
+    ('Camión volquete', 2);
+
+-- Insertar datos en la tabla Trabajador
+insert into Trabajador
+    (nombre, apellido, id_tipo_cargo_fk, fecha_contratacion)
+values
+    ('Juan', 'Pérez', 1, '2023-01-01'),
+    -- Logístico
+    ('Ana', 'Gómez', 2, '2023-02-15'),
+    -- Especialista
+    ('Carlos', 'Ruiz', 3, '2023-03-10'),
+    -- Gerente
+    ('Elena', 'Martínez', 4, '2023-04-20'),
+    -- Analista
+    ('Roberto', 'López', 5, '2023-05-05'),-- Operador de Excavación
+    ('kiara', 'Carvajal', 6, '2015-04-15');
+--Administrador 
+
+-- Insertar datos en la tabla AsignacionTrabajador
+insert into AsignacionTrabajador
+    (id_trabajador_fk, id_material_fk, n_horas_trabajo)
+values
+    (1, 1, 8.5),
+    -- Juan Pérez asignado al Material1
+    (2, 2, 7.0),
+    -- Ana Gómez asignada al Material2
+    (3, 3, 6.5),
+    -- Carlos Ruiz asignado al Material3
+    (4, 1, 9.0),
+    -- Elena Martínez asignada al Material1
+    (5, 2, 7.5);
+-- Roberto López asignado al Material2
+>>>>>>> Stashed changes
 
 -- Insertar datos en la tabla Yacimiento
-insert INTO Yacimiento (nombre_campo, ubicacion, fecha_descubrimiento) values
+insert INTO Yacimiento
+    (nombre_campo, ubicacion, fecha_descubrimiento)
+values
     ('Gacela', 'Coca Payamino', '2005-08-15'),
     ('Jaguar', 'Coca Payamino', '2010-03-22'),
     ('Lobo', 'Oriente', '1998-12-05'),
@@ -147,7 +291,9 @@ insert INTO Yacimiento (nombre_campo, ubicacion, fecha_descubrimiento) values
 
 
 -- Insertar datos en la tabla Pozo
-insert into Pozo (id_campo_fk, nombre, profundidad, estado) values
+insert into Pozo
+    (id_campo_fk, nombre, profundidad, estado)
+values
     (1, 'Pozo1', 800.0, 'A'),
     (2, 'Pozo2', 900.0, 'I'),
     (3, 'Pozo3', 750.0, 'A'),
@@ -155,12 +301,23 @@ insert into Pozo (id_campo_fk, nombre, profundidad, estado) values
     (5, 'Pozo5', 1200.0, 'A');
 
 -- Insertar datos en la tabla Extraccion
+<<<<<<< Updated upstream
 insert into Extraccion (id_pozo_fk, id_asignacion_fk, fecha_extraccion, volumen_extraido,n_horas_trabajo) values
     (1, 1, '2023-01-10', 300.2,7.5),
     (2, 2, '2023-05-12', 150.5,5.5),
     (3, 3, '2023-09-15', 200.8,8.3),
     (4, 3, '2022-11-18', 400.0,4.5),
     (5, 1, '2023-12-20', 500.0,8.1);
+=======
+insert into Extraccion
+    (id_pozo_fk, id_asignacion_fk, fecha_extraccion, volumen_extraido)
+values
+    (1, 1, '2023-08-10', 300.2),
+    (2, 2, '2023-08-12', 150.5),
+    (3, 3, '2023-08-15', 200.8),
+    (4, 4, '2023-08-18', 400.0),
+    (5, 5, '2023-08-20', 500.0);
+>>>>>>> Stashed changes
 
 /*----------------------------------------------------------------------------------------------
 						               PROCEDIMIENTOS Y VISTAS
@@ -172,15 +329,18 @@ CREATE PROCEDURE sp_InsertTipoCargo
     @Cargo VARCHAR(50)
 AS
 BEGIN
-    INSERT INTO TipoCargo (cargo)
-    VALUES (@Cargo);
+    INSERT INTO TipoCargo
+        (cargo)
+    VALUES
+        (@Cargo);
 END;
 
 /**********Read**************/
 CREATE PROCEDURE sp_GetTipoCargo
 AS
 BEGIN
-    SELECT * FROM TipoCargo;
+    SELECT *
+    FROM TipoCargo;
 END;
 
 -- Update
@@ -212,15 +372,18 @@ CREATE PROCEDURE sp_InsertTipoMaterial
     @TipoMaterial VARCHAR(50)
 AS
 BEGIN
-    INSERT INTO TipoMaterial (tipo_material)
-    VALUES (@TipoMaterial);
+    INSERT INTO TipoMaterial
+        (tipo_material)
+    VALUES
+        (@TipoMaterial);
 END;
 
 /**********Read**************/
 CREATE PROCEDURE sp_GetTipoMaterial
 AS
 BEGIN
-    SELECT * FROM TipoMaterial;
+    SELECT *
+    FROM TipoMaterial;
 END;
 
 /**********Update**************/
@@ -254,15 +417,23 @@ CREATE PROCEDURE sp_InsertTrabajador
     @FechaContratacion DATE
 AS
 BEGIN
+<<<<<<< Updated upstream
     INSERT INTO Trabajador (nombre, apellido, id_asignacion_fk, id_tipo_cargo_fk, fecha_contratacion)
     VALUES (@Nombre, @Apellido, @IdAsignacion, @IdTipoCargo, @FechaContratacion);
+=======
+    INSERT INTO Trabajador
+        (nombre, apellido, id_tipo_cargo_fk, fecha_contratacion)
+    VALUES
+        (@Nombre, @Apellido, @IdTipoCargo, @FechaContratacion);
+>>>>>>> Stashed changes
 END;
 
 -- Procedimiento almacenado para leer (Read) todos los trabajadores
 CREATE PROCEDURE sp_GetTrabajadores
 AS
 BEGIN
-    SELECT * FROM Trabajador;
+    SELECT *
+    FROM Trabajador;
 END;
 
 -- Procedimiento almacenado para leer (Read) un trabajador específico por su ID
@@ -309,15 +480,18 @@ CREATE PROCEDURE sp_InsertAsignacionTrabajador
     @NHorasTrabajo FLOAT
 AS
 BEGIN
-    INSERT INTO AsignacionTrabajador (id_trabajador_fk, id_material_fk, n_horas_trabajo)
-    VALUES (@IdTrabajador, @IdMaterial, @NHorasTrabajo);
+    INSERT INTO AsignacionTrabajador
+        (id_trabajador_fk, id_material_fk, n_horas_trabajo)
+    VALUES
+        (@IdTrabajador, @IdMaterial, @NHorasTrabajo);
 END;
 
 -- Read
 CREATE PROCEDURE sp_GetAsignacionTrabajador
 AS
 BEGIN
-    SELECT * FROM AsignacionTrabajador;
+    SELECT *
+    FROM AsignacionTrabajador;
 END;
 
 -- Update
@@ -351,15 +525,18 @@ CREATE PROCEDURE sp_InsertMaterial
     @IdTipoMaterial INT
 AS
 BEGIN
-    INSERT INTO Material (nombre, id_tipo_material_fk)
-    VALUES (@Nombre, @IdTipoMaterial);
+    INSERT INTO Material
+        (nombre, id_tipo_material_fk)
+    VALUES
+        (@Nombre, @IdTipoMaterial);
 END;
 
 /**********Read**************/
 CREATE PROCEDURE sp_GetMaterial
 AS
 BEGIN
-    SELECT * FROM Material;
+    SELECT *
+    FROM Material;
 END;
 
 /**********Update**************/
@@ -391,15 +568,18 @@ CREATE PROCEDURE sp_InsertYacimiento
     @Fecha_descubrimiento DATE
 AS
 BEGIN
-    INSERT INTO Yacimiento (nombre_campo, ubicacion,fecha_descubrimiento)
-    VALUES (@Nombre_campo,@Ubicacion,@Fecha_descubrimiento);
+    INSERT INTO Yacimiento
+        (nombre_campo, ubicacion,fecha_descubrimiento)
+    VALUES
+        (@Nombre_campo, @Ubicacion, @Fecha_descubrimiento);
 END;
 
 -- Read
 CREATE PROCEDURE sp_GetYacimiento
 AS
 BEGIN
-    SELECT * FROM Yacimiento;
+    SELECT *
+    FROM Yacimiento;
 END;
 exec sp_GetYacimiento
 -- Update
@@ -434,15 +614,18 @@ CREATE PROCEDURE sp_InsertPozo
     @Estado CHAR(1)
 AS
 BEGIN
-    INSERT INTO Pozo (id_campo_fk, nombre, profundidad, estado)
-    VALUES (@IdCampo, @Nombre, @Profundidad, @Estado);
+    INSERT INTO Pozo
+        (id_campo_fk, nombre, profundidad, estado)
+    VALUES
+        (@IdCampo, @Nombre, @Profundidad, @Estado);
 END;
 
 -- Read
 CREATE PROCEDURE sp_GetPozo
 AS
 BEGIN
-    SELECT * FROM Pozo;
+    SELECT *
+    FROM Pozo;
 END;
 
 -- Update
@@ -531,21 +714,23 @@ END;
 -- Vista para Material
 CREATE VIEW vw_Material
 AS
-SELECT m.id_material_pk AS IdMaterial, m.nombre AS NombreMaterial, tm.tipo_material AS TipoMaterial
-FROM Material m
-INNER JOIN TipoMaterial tm ON m.id_tipo_material_fk = tm.id_tipo_material_pk;
+    SELECT m.id_material_pk AS IdMaterial, m.nombre AS NombreMaterial, tm.tipo_material AS TipoMaterial
+    FROM Material m
+        INNER JOIN TipoMaterial tm ON m.id_tipo_material_fk = tm.id_tipo_material_pk;
 
-CREATE VIEW vw_Trabajador AS
-SELECT T.id_trabajador_pk,T.nombre,T.apellido,P.cargo ,T.fecha_contratacion
-FROM Trabajador T
-INNER JOIN TipoCargo P ON P.id_tipo_cargo_pk=T.id_tipo_cargo_fk
+CREATE VIEW vw_Trabajador
+AS
+    SELECT T.id_trabajador_pk, T.nombre, T.apellido, P.cargo , T.fecha_contratacion
+    FROM Trabajador T
+        INNER JOIN TipoCargo P ON P.id_tipo_cargo_pk=T.id_tipo_cargo_fk
 
 -- Vista para Pozo
-CREATE VIEW vw_Pozo AS
-SELECT p.id_pozo_pk AS IdPozo, y.nombre_campo AS NombreCampo, p.nombre AS NombrePozo,
-       p.profundidad AS Profundidad, p.estado AS Estado
-FROM Pozo p
-INNER JOIN Yacimiento y ON p.id_campo_fk = y.id_campo_pk;
+CREATE VIEW vw_Pozo
+AS
+    SELECT p.id_pozo_pk AS IdPozo, y.nombre_campo AS NombreCampo, p.nombre AS NombrePozo,
+        p.profundidad AS Profundidad, p.estado AS Estado
+    FROM Pozo p
+        INNER JOIN Yacimiento y ON p.id_campo_fk = y.id_campo_pk;
 
 
 
@@ -555,48 +740,48 @@ INNER JOIN Yacimiento y ON p.id_campo_fk = y.id_campo_pk;
 -- Vista para TipoCargo
 CREATE VIEW vw_TipoCargo
 AS
-SELECT id_tipo_cargo_pk AS IdTipoCargo, cargo AS Cargo
-FROM TipoCargo;
+    SELECT id_tipo_cargo_pk AS IdTipoCargo, cargo AS Cargo
+    FROM TipoCargo;
 
 -- Vista para TipoMaterial
 CREATE VIEW vw_TipoMaterial
 AS
-SELECT id_tipo_material_pk AS IdTipoMaterial, tipo_material AS TipoMaterial
-FROM TipoMaterial;
+    SELECT id_tipo_material_pk AS IdTipoMaterial, tipo_material AS TipoMaterial
+    FROM TipoMaterial;
 
 -- Vista para AsignacionTrabajador
 CREATE VIEW vw_AsignacionTrabajador
 AS
-SELECT at.id_asignacion_pk AS IdAsignacion, t.nombre + ' ' + t.apellido AS Trabajador,
-       m.nombre AS Material, at.n_horas_trabajo AS HorasTrabajo
-FROM AsignacionTrabajador at
-INNER JOIN Trabajador t ON at.id_trabajador_fk = t.id_trabajador_pk
-LEFT JOIN Material m ON at.id_material_fk = m.id_material_pk;
+    SELECT at.id_asignacion_pk AS IdAsignacion, t.nombre + ' ' + t.apellido AS Trabajador,
+        m.nombre AS Material, at.n_horas_trabajo AS HorasTrabajo
+    FROM AsignacionTrabajador at
+        INNER JOIN Trabajador t ON at.id_trabajador_fk = t.id_trabajador_pk
+        LEFT JOIN Material m ON at.id_material_fk = m.id_material_pk;
 
 -- Vista para Yacimiento
 CREATE VIEW vw_Yacimiento
 AS
-SELECT id_campo_pk AS IdCampo, nombre_campo AS NombreCampo, ubicacion AS Ubicacion, fecha_descubrimiento AS FechaDescubrimiento
-FROM Yacimiento;
+    SELECT id_campo_pk AS IdCampo, nombre_campo AS NombreCampo, ubicacion AS Ubicacion, fecha_descubrimiento AS FechaDescubrimiento
+    FROM Yacimiento;
 
 
 
 -- Vista para Extraccion
 CREATE VIEW vw_Extraccion
 AS
-SELECT e.id_extraccion_pk AS IdExtraccion, p.nombre AS NombrePozo, t.nombre + ' ' + t.apellido AS Trabajador,
-       e.fecha_extraccion AS FechaExtraccion, e.volumen_extraido AS VolumenExtraido
-FROM Extraccion e
-INNER JOIN Pozo p ON e.id_pozo_fk = p.id_pozo_pk
-INNER JOIN AsignacionTrabajador at ON e.id_asignacion_fk = at.id_asignacion_pk
-INNER JOIN Trabajador t ON at.id_trabajador_fk = t.id_trabajador_pk;
+    SELECT e.id_extraccion_pk AS IdExtraccion, p.nombre AS NombrePozo, t.nombre + ' ' + t.apellido AS Trabajador,
+        e.fecha_extraccion AS FechaExtraccion, e.volumen_extraido AS VolumenExtraido
+    FROM Extraccion e
+        INNER JOIN Pozo p ON e.id_pozo_fk = p.id_pozo_pk
+        INNER JOIN AsignacionTrabajador at ON e.id_asignacion_fk = at.id_asignacion_pk
+        INNER JOIN Trabajador t ON at.id_trabajador_fk = t.id_trabajador_pk;
 
 -- Vista para Usuario
 CREATE VIEW vw_Usuario
 AS
-SELECT u.id_usuario_pk AS IdUsuario, u.usuario AS Usuario, t.nombre + ' ' + t.apellido AS Trabajador
-FROM Usuario u
-INNER JOIN Trabajador t ON u.id_trabajador_fk = t.id_trabajador_pk;
+    SELECT u.id_usuario_pk AS IdUsuario, u.usuario AS Usuario, t.nombre + ' ' + t.apellido AS Trabajador
+    FROM Usuario u
+        INNER JOIN Trabajador t ON u.id_trabajador_fk = t.id_trabajador_pk;
 
 
 
