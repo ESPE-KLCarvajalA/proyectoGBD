@@ -14,39 +14,32 @@ create table TipoMaterial (
    tipo_material        varchar(50) null,
    constraint pk_tipomaterial primary key (id_tipo_material_pk)
 );
-/*
-create table TipoReserva (
-   id_tipo_reserva_pk int identity(1,1) not null,
-   tipo_reserva varchar(50) null,
-   constraint pk_tiporeserva primary key (id_tipo_reserva_pk)
-);
-*/
+
 create table Material (
    id_material_pk int identity(1,1) not null,
    nombre  varchar(50) null,
    id_tipo_material_fk  int not null,
+   id_asignacion_fk int null,
    constraint pk_materiales primary key (id_material_pk),
    constraint fk_material_refernces_tipoma foreign key(id_tipo_material_fk) references TipoMaterial(id_tipo_material_pk)
+   constraint fk_material_refernces_grupo foreign key(id_asignacion_fk) references Grupo (id_asignacion_fk)
 );
-
 create table Trabajador (
    id_trabajador_pk  int identity(1,1) not null,
    nombre varchar(50) null,
    apellido varchar(50) null,
+   id_asignacion_fk int not null,
    id_tipo_cargo_fk int null,
    fecha_contratacion date null,
    constraint fk_material_reference_tipomate foreign key (id_tipo_cargo_fk)references TipoCargo (id_tipo_cargo_pk),
-   constraint pk_trabajador primary key (id_trabajador_pk)
+   constraint pk_trabajador primary key (id_trabajador_pk),
+   constraint fk_trabajador_references_grupo FOREIGN KEY (id_asignacion_fk) REFERENCES Grupo (id_asignacion_pk)
 );
 
-create table AsignacionTrabajador (
+create table Grupo (
    id_asignacion_pk int  identity(1,1) not null,
-   id_trabajador_fk int not null,
-   id_material_fk int null,
-   n_horas_trabajo float,
+   nombre_grupo varchar(15) not null,
    constraint pk_asignaciontrabajador primary key (id_asignacion_pk),
-   constraint fk_asignaci_reference_material foreign key (id_material_fk)references Material (id_material_pk),
-   constraint fk_asignaci_reference_trabajad foreign key (id_trabajador_fk)references Trabajador (id_trabajador_pk)
 );
 
 create table Yacimiento (
@@ -56,18 +49,7 @@ create table Yacimiento (
    fecha_descubrimiento date,
    constraint pk_yacimiento primary key (id_campo_pk)
 );
-/*
-create table Reserva (
-   id_reserva_pk        int identity(1,1) not null,
-   id_campo_fk          int null,
-   fecha_registro       date null,
-   cantidad_reservada   decimal null,
-   id_tipo_reserva_fk   int null,
-   constraint pk_reserva primary key (id_reserva_pk),
-   constraint fk_reserva_references_yaci foreign key (id_campo_fk) references Yacimiento (id_campo_pk),
-   constraint fk_reserva_references_tiporeser foreign key (id_tipo_reserva_fk) references TipoReserva (id_tipo_reserva_pk)
-);
-*/
+
 create table Pozo (
    id_pozo_pk           int identity(1,1) not null,
    id_campo_fk          int null,
@@ -85,9 +67,10 @@ create table Extraccion (
    id_asignacion_fk int null,
    fecha_extraccion date null,
    volumen_extraido decimal null,
+   n_horas_trabajo float,
    constraint pk_extraccion primary key (id_extraccion_pk),
    constraint fk_extraccion_references_pozo foreign key (id_pozo_fk) references Pozo (id_pozo_pk),
-   constraint fk_extraccion_references_asig foreign key (id_asignacion_fk) references AsignacionTrabajador (id_asignacion_pk)
+   constraint fk_extraccion_references_grupo foreign key (id_asignacion_fk) references Grupo (id_asignacion_pk)
 );
 
 create table Usuario(
@@ -134,27 +117,23 @@ END;
 insert into Usuario values ('admin','admin',6);
 insert into TipoCargo values('Logístico'),('Especialista'),('Gerente'),('Analista'),('Operador de Excavación'),('Operador de Maquinaria'),('Administrador');
 insert into TipoMaterial values('Herramientas de Excavación'),('Maquinaria vehicular');
-
+select * from TipoCargo
 -- Insertar datos en la tabla Material
 insert into Material values ('Martillo neumático', 1),('Excavadora de orugas', 2),('Pala mecánica', 2),
                             ('Taladro rotativo', 1),('Camión volquete', 2);
-
+							
 -- Insertar datos en la tabla Trabajador
-insert into Trabajador (nombre, apellido, id_tipo_cargo_fk, fecha_contratacion) values
-    ('Juan', 'Pérez', 1, '2023-01-01'), -- Logístico
-    ('Ana', 'Gómez', 2, '2023-02-15'), -- Especialista
-    ('Carlos', 'Ruiz', 3, '2023-03-10'), -- Gerente
-    ('Elena', 'Martínez', 4, '2023-04-20'), -- Analista
-    ('Roberto', 'López', 5, '2023-05-05'),-- Operador de Excavación
-	('kiara', 'Carvajal', 6, '2015-04-15'); --Administrador 
+insert into Trabajador (nombre, apellido, id_tipo_cargo_fk, fecha_contratacion,id_asignacion_fk) values
+    ('Juan', 'Pérez', 1, '2023-01-01',1), -- Logístico
+    ('Ana', 'Gómez', 2, '2023-02-15',2), -- Especialista
+    ('Carlos', 'Ruiz', 3, '2023-03-10',3), -- Gerente
+    ('Elena', 'Martínez', 4, '2023-04-20',3), -- Analista
+    ('Roberto', 'López', 5, '2023-05-05',2),-- Operador de Excavación
+	('kiara', 'Carvajal', 6, '2015-04-15',1); --Administrador 
 
--- Insertar datos en la tabla AsignacionTrabajador
-insert into AsignacionTrabajador (id_trabajador_fk, id_material_fk, n_horas_trabajo) values
-    (1, 1, 8.5), -- Juan Pérez asignado al Material1
-    (2, 2, 7.0), -- Ana Gómez asignada al Material2
-    (3, 3, 6.5), -- Carlos Ruiz asignado al Material3
-    (4, 1, 9.0), -- Elena Martínez asignada al Material1
-    (5, 2, 7.5); -- Roberto López asignado al Material2
+-- Insertar datos en la tabla Grupo
+insert into Grupo values
+    ('Grupo 1'), ('Grupo 2'),('Grupo 3');
 
 -- Insertar datos en la tabla Yacimiento
 insert INTO Yacimiento (nombre_campo, ubicacion, fecha_descubrimiento) values
@@ -166,17 +145,7 @@ insert INTO Yacimiento (nombre_campo, ubicacion, fecha_descubrimiento) values
     ('Coca', 'Sur del Oriente', '1985-09-30'),
     ('Coca Payamino', 'Nantú, Orellana', '2008-11-14');
 
-/*Insertar datos en la tabla Reserva
-insert into TipoReserva values('Probada'),('Probable'),('Posible');
-insert into Reserva (id_campo_fk, fecha_registro, cantidad_reservada, id_tipo_reserva_fk) values
-    (1, '2023-08-10', NULL, 1), -- Gacela (sin información específica sobre reservas)
-    (2, '2023-03-22', NULL, 2), -- Jaguar (rango de reservas)
-    (3, '2023-11-15', NULL, 3), -- Lobo (sin información específica sobre reservas)
-    (4, '2023-05-01', 4.5E6, 2), -- Mono (incremento estimado hasta 2034)
-    (5, '2023-07-20', 4.1E6, 2), -- Oso (producción anual)
-    (6, '2023-04-10', 4800, 1), -- Coca (producción diaria)
-    (7, '2023-09-05', 460, 3); -- Coca Payamino (producción diaria estimada)
-*/
+
 -- Insertar datos en la tabla Pozo
 insert into Pozo (id_campo_fk, nombre, profundidad, estado) values
     (1, 'Pozo1', 800.0, 'A'),
@@ -186,12 +155,12 @@ insert into Pozo (id_campo_fk, nombre, profundidad, estado) values
     (5, 'Pozo5', 1200.0, 'A');
 
 -- Insertar datos en la tabla Extraccion
-insert into Extraccion (id_pozo_fk, id_asignacion_fk, fecha_extraccion, volumen_extraido) values
-    (1, 1, '2023-08-10', 300.2),
-    (2, 2, '2023-08-12', 150.5),
-    (3, 3, '2023-08-15', 200.8),
-    (4, 4, '2023-08-18', 400.0),
-    (5, 5, '2023-08-20', 500.0);
+insert into Extraccion (id_pozo_fk, id_asignacion_fk, fecha_extraccion, volumen_extraido,n_horas_trabajo) values
+    (1, 1, '2023-01-10', 300.2,7.5),
+    (2, 2, '2023-05-12', 150.5,5.5),
+    (3, 3, '2023-09-15', 200.8,8.3),
+    (4, 3, '2022-11-18', 400.0,4.5),
+    (5, 1, '2023-12-20', 500.0,8.1);
 
 /*----------------------------------------------------------------------------------------------
 						               PROCEDIMIENTOS Y VISTAS
@@ -276,30 +245,41 @@ END;
 
 
 ----------------------------------------------------------Procedimientos almacenados para Trabajador:
--- Create
+-- Procedimiento almacenado para crear (Create) un nuevo trabajador
 CREATE PROCEDURE sp_InsertTrabajador
     @Nombre VARCHAR(50),
     @Apellido VARCHAR(50),
+    @IdAsignacion INT,
     @IdTipoCargo INT,
     @FechaContratacion DATE
 AS
 BEGIN
-    INSERT INTO Trabajador (nombre, apellido, id_tipo_cargo_fk, fecha_contratacion)
-    VALUES (@Nombre, @Apellido, @IdTipoCargo, @FechaContratacion);
+    INSERT INTO Trabajador (nombre, apellido, id_asignacion_fk, id_tipo_cargo_fk, fecha_contratacion)
+    VALUES (@Nombre, @Apellido, @IdAsignacion, @IdTipoCargo, @FechaContratacion);
 END;
 
--- Read
-CREATE PROCEDURE sp_GetTrabajador
+-- Procedimiento almacenado para leer (Read) todos los trabajadores
+CREATE PROCEDURE sp_GetTrabajadores
 AS
 BEGIN
     SELECT * FROM Trabajador;
 END;
 
--- Update
+-- Procedimiento almacenado para leer (Read) un trabajador específico por su ID
+CREATE PROCEDURE sp_GetTrabajadorById
+    @IdTrabajador INT
+AS
+BEGIN
+    SELECT * FROM Trabajador
+    WHERE id_trabajador_pk = @IdTrabajador;
+END;
+
+-- Procedimiento almacenado para actualizar (Update) un trabajador
 CREATE PROCEDURE sp_UpdateTrabajador
     @IdTrabajador INT,
     @Nombre VARCHAR(50),
     @Apellido VARCHAR(50),
+    @IdAsignacion INT,
     @IdTipoCargo INT,
     @FechaContratacion DATE
 AS
@@ -307,11 +287,12 @@ BEGIN
     UPDATE Trabajador
     SET nombre = @Nombre,
         apellido = @Apellido,
+        id_asignacion_fk = @IdAsignacion,
         id_tipo_cargo_fk = @IdTipoCargo,
         fecha_contratacion = @FechaContratacion
     WHERE id_trabajador_pk = @IdTrabajador;
 END;
-
+select * from Trabajador
 -- Delete
 CREATE PROCEDURE sp_DeleteTrabajador
     @IdTrabajador INT
@@ -489,6 +470,59 @@ BEGIN
     DELETE FROM Pozo
     WHERE id_pozo_pk = @IdPozo;
 END;
+----------------------------------------------------------Procedimientos almacenados para Extraccion:
+CREATE PROCEDURE sp_InsertExtraccion
+    @IdPozo INT,
+    @IdAsignacion INT,
+    @FechaExtraccion DATE,
+    @VolumenExtraido DECIMAL
+AS
+BEGIN
+    INSERT INTO Extraccion (id_pozo_fk, id_asignacion_fk, fecha_extraccion, volumen_extraido)
+    VALUES (@IdPozo, @IdAsignacion, @FechaExtraccion, @VolumenExtraido);
+END;
+
+-- Procedimiento almacenado para leer (Read) todas las extracciones
+CREATE PROCEDURE sp_GetExtracciones
+AS
+BEGIN
+    SELECT * FROM Extraccion;
+END;
+
+-- Procedimiento almacenado para leer (Read) una extracción específica por su ID
+CREATE PROCEDURE sp_GetExtraccionById
+    @IdExtraccion INT
+AS
+BEGIN
+    SELECT * FROM Extraccion
+    WHERE id_extraccion_pk = @IdExtraccion;
+END;
+
+-- Procedimiento almacenado para actualizar (Update) una extracción
+CREATE PROCEDURE sp_UpdateExtraccion
+    @IdExtraccion INT,
+    @IdPozo INT,
+    @IdAsignacion INT,
+    @FechaExtraccion DATE,
+    @VolumenExtraido DECIMAL
+AS
+BEGIN
+    UPDATE Extraccion
+    SET id_pozo_fk = @IdPozo,
+        id_asignacion_fk = @IdAsignacion,
+        fecha_extraccion = @FechaExtraccion,
+        volumen_extraido = @VolumenExtraido
+    WHERE id_extraccion_pk = @IdExtraccion;
+END;
+
+-- Procedimiento almacenado para eliminar (Delete) una extracción
+CREATE PROCEDURE sp_DeleteExtraccion
+    @IdExtraccion INT
+AS
+BEGIN
+    DELETE FROM Extraccion
+    WHERE id_extraccion_pk = @IdExtraccion;
+END;
 
 /*----------------------------------------------------------------------------------------------
 												VISTAS
@@ -566,3 +600,15 @@ INNER JOIN Trabajador t ON u.id_trabajador_fk = t.id_trabajador_pk;
 
 
 
+-- Crear la vista
+CREATE VIEW vw_ExtraccionConGrupos AS
+SELECT
+    id_extraccion_pk,
+    P.nombre,
+    id_asignacion_fk,
+    fecha_extraccion,
+    volumen_extraido
+FROM Extraccion E
+JOIN Pozo P ON P.id_pozo_pk=E.id_pozo_fk
+
+select * from Trabajador

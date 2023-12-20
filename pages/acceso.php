@@ -36,10 +36,9 @@
                   <p class="mb-0">Ingresa tu correo y tu contraseña para iniciar sesión</p>
                 </div>
                 <div class="card-body">
-                  <!-- Cambiado el método de POST y action -->
-                  <form role="form" method="post" action="autenticar.php">
+                  <form role="form" method="post" action="../login/autenticar.php">
                     <div class="mb-3">
-                      <input type="email" class="form-control form-control-lg" placeholder="Correo" aria-label="Email" name="correo">
+                      <input type="text" class="form-control form-control-lg" placeholder="text" aria-label="text" name="correo">
                     </div>
                     <div class="mb-3">
                       <input type="password" class="form-control form-control-lg" placeholder="Contraseña" aria-label="Password" name="contrasena">
@@ -50,38 +49,24 @@
                     </div>
                   </form>
                 </div>
-                <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                  <p class="mb-4 text-sm mx-auto">
-                    ¿No tienes una cuenta?
-                    <a href="../pages/registrarse.php" class="text-primary text-gradient font-weight-bold">Registrate</a>
-                  </p>
-                </div>
+              </div>
+              <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+              <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('../assets/img/fondo_login.jpeg');
+          background-size: cover;">
+                <span class="mask bg-gradient-primary opacity-6"></span>
+                <h4 class="mt-5 text-white font-weight-bolder position-relative">"Attention is the new currency"</h4>
+                <p class="text-white position-relative">The more effortless the writing looks, the more effort the writer actually put into the process.</p>
               </div>
             </div>
-            <!-- ... Código posterior ... -->
+            </div>
           </div>
         </div>
       </div>
     </section>
+    <?php include('../elements/footer.php'); ?>
   </main>
   <!--   Core JS Files   -->
-  <script src="../assets/js/core/popper.min.js"></script>
-  <script src="../assets/js/core/bootstrap.min.js"></script>
-  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-  </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/argon-dashboard.min.js?v=2.0.4"></script>
+  <?php include('../elements/dependencias.php'); ?>
 </body>
 
 </html>

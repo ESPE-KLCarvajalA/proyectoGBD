@@ -15,6 +15,13 @@
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/argon-dashboard.css">
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+
+  <style>
+    .bg-gray-100 {
+  background-color: #e5ebf1 !important;
+}
+  </style>
 </head>

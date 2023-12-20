@@ -1,28 +1,29 @@
 <?php
 include_once '../formularios/Conexion.php';
 
-//proceso_editar_Trabajador.php
 // Verifica si se ha enviado un formulario válido
 if (isset($_POST['submit'])) {
     // Obtener datos del formulario
     $idTrabajador = $_POST['idTrabajador'];
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
-    $idTipoCargo = $_POST['idTipoCargo'];
-    $fechaContratacion = $_POST['fechaContratacion'];
+    $id_asignacion_fk = $_POST['id_asignacion_fk'];
+    $id_tipo_cargo_fk = $_POST['id_tipo_cargo_fk'];
+    $fechaContratacion = $_POST['fecha_contratacion'];
 
     // Obtén la conexión utilizando el método estático de la clase
     $conexion = Cconexion::ConexionBD();
 
     if ($conexion) {
         // Preparar la llamada al procedimiento almacenado de actualización
-        $sql = "EXEC sp_UpdateTrabajador @IdTrabajador=?, @Nombre=?, @Apellido=?, @IdTipoCargo=?, @FechaContratacion=?";
+        $sql = "EXEC sp_UpdateTrabajador @IdTrabajador=?, @Nombre=?, @Apellido=?, @IdAsignacion=?, @IdTipoCargo=?, @FechaContratacion=?";
         $stmt = $conexion->prepare($sql);
         $stmt->bindParam(1, $idTrabajador, PDO::PARAM_INT);
         $stmt->bindParam(2, $nombre, PDO::PARAM_STR);
         $stmt->bindParam(3, $apellido, PDO::PARAM_STR);
-        $stmt->bindParam(4, $idTipoCargo, PDO::PARAM_INT);
-        $stmt->bindParam(5, $fechaContratacion, PDO::PARAM_STR);
+        $stmt->bindParam(4, $id_asignacion_fk, PDO::PARAM_INT);
+        $stmt->bindParam(5, $id_tipo_cargo_fk, PDO::PARAM_INT);
+        $stmt->bindParam(6, $fechaContratacion, PDO::PARAM_STR);
         $stmt->execute();
 
         echo "Trabajador actualizado correctamente.";

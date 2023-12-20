@@ -1,6 +1,4 @@
 <?php
-//editar_Trabajador.php
-
 include_once '../formularios/Conexion.php';
 
 // Verifica si se ha enviado un ID válido por GET
@@ -11,7 +9,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $conexion = Cconexion::ConexionBD();
 
     if ($conexion) {
-
         $sql = "SELECT * FROM Trabajador WHERE id_trabajador_pk = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bindParam(1, $idTrabajador, PDO::PARAM_INT);
@@ -69,62 +66,97 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <form id="frmAgrega" class="row" method="post" action="Trabajador.php"
+                                            <form id="frmAgrega" class="row" method="post" action="proceso_editar_Trabajador.php"
                                                 onsubmit="return guardarPerfil()">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                    <input type="hidden" name="idTrabajador" value="<?= $trabajador['id_trabajador_pk'] ?>">
+                                                        <input type="hidden" name="idTrabajador"
+                                                            value="<?= $trabajador['id_trabajador_pk'] ?>">
                                                         <label for="nombre" class="form-control-label">Nombre:</label>
-                                                        <input class="form-control" type="text" name="nombre" id="nombre" value="<?= $trabajador['nombre'] ?>">
+                                                        <input class="form-control" type="text" name="nombre" id="nombre"
+                                                            value="<?= $trabajador['nombre'] ?>">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="apellido" class="form-control-label">Apellido:</label>
-                                                        <input class="form-control" type="text" name="apellido" id="apellido" value="<?= $trabajador['apellido'] ?>">
+                                                        <input class="form-control" type="text" name="apellido" id="apellido"
+                                                            value="<?= $trabajador['apellido'] ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="fecha_contratacion" class="form-control-label">Grupo
+                                                            Asignado:</label>
+                                                        <select class="form-control" name="id_asignacion_fk" id="id_asignacion_fk">
+                                                            <option value="1" <?= ($trabajador['id_asignacion_fk'] == 1) ? 'selected' : '1'; ?>>Grupo 1</option>
+                                                            <option value="2" <?= ($trabajador['id_asignacion_fk'] == 2) ? 'selected' : '2'; ?>>Grupo 2</option>
+                                                            <option value="3" <?= ($trabajador['id_asignacion_fk'] == 3) ? 'selected' : '3'; ?>>Grupo 3</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="tipo_puesto" class="form-control-label">Tipo de Puesto:</label>
-                                                        <input class="form-control" type="text" name="tipo_puesto" id="tipo_puesto" value="<?= $trabajador['id_tipo_cargo_fk'] ?>">
+                                                        <select class="form-control" name="id_tipo_cargo_fk" id="id_tipo_cargo_fk">
+                                                            <?php
+                                                            $tiposPuesto = [
+                                                                1 => 'Logístico',
+                                                                2 => 'Especialista',
+                                                                3 => 'Gerente',
+                                                                4 => 'Analísta',
+                                                                5 => 'Operador de Excavación',
+                                                                6 => 'Operador de Maquinaria',
+                                                                7 => 'Administrador'
+                                                            ];
+                                                            foreach ($tiposPuesto as $value => $tipo) {
+                                                                $selected = ($trabajador['id_tipo_cargo_fk'] == $value) ? 'selected="selected"' : '';
+                                                                echo "<option value=\"$value\" $selected>$tipo</option>";
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="fecha_contratacion" class="form-control-label">Fecha de
                                                             Contrato:</label>
                                                         <input class="form-control" type="date" name="fecha_contratacion"
-                                                            id="fecha_contratacion" value="<?= $trabajador['fecha_contratacion'] ?>">
+                                                            id="fecha_contratacion"
+                                                            value="<?= $trabajador['fecha_contratacion'] ?>">
                                                     </div>
                                                 </div>
-                                                <div class="boton">
-                                                    <input class="btn btn-primary btn-sm ms-auto" type="submit" name="submit"
-                                                        value="Agregar">
-                                                </div>
-                                                <script>
-                                                    function guardarPerfil() {
-                                                        var nombre = document.getElementById("nombre").value;
-                                                        var apellido = document.getElementById("apellido").value;
-                                                        var tipo_puesto = document.getElementById("tipo_puesto").value;
-                                                        var fecha_contratacion = document.getElementById("fecha_contratacion").value;
-
-                                                        if (nombre === "" || apellido === "" || tipo_puesto === "" || fecha_contratacion === "") {
-                                                            alert("Por favor, complete todos los campos antes de guardar.");
-                                                            return false;
-                                                        } else {
-                                                            return true;
-                                                        }
-                                                    }
-                                                </script>
-                                            </form>
                                         </div>
+                                        <div class="boton" href="../pages/tabla.php">
+                                            <input class="btn btn-primary btn-sm ms-auto" onclick="guardarPerfil()" type="submit"
+                                                name="submit" value="Actualizar">
+                                        </div>
+                                        </form>
                                     </div>
+                                    <script>
+                                        function guardarPerfil() {
+                                            var nombre = document.getElementById("nombre").value;
+                                            var apellido = document.getElementById("apellido").value;
+                                            var tipo_puesto = document.getElementById("tipo_puesto").value;
+                                            var fecha_contratacion = document.getElementById("fecha_contratacion").value;
+
+                                            if (nombre === "" || apellido === "" || tipo_puesto === "" || fecha_contratacion === "") {
+                                                alert("Por favor, complete todos los campos antes de guardar.");
+                                                return false;
+                                            } else {
+                                                return true;
+                                            }
+                                        }
+                                    </script>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                        <?php include('../elements/footer.php'); ?>
-                    </main>
+                </div>
+                </div>
+                <?php include('../elements/footer.php'); ?>
+                </main>
                 </div>
                 <?php include '../elements/dependencias.php'; ?>
             </body>

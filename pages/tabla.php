@@ -184,6 +184,7 @@ if ($conexion) {
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">ID</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nombre</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Apellido</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Grupo</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Tipo de Puesto</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Fecha contratacion</th>
                       <th class="text-secondary opacity-7"></th>
@@ -196,6 +197,7 @@ if ($conexion) {
                     echo "<td class='text-center text-xs'>{$filaTrabajador['id_trabajador_pk']}</td>";
                     echo "<td class='text-center text-xs'>{$filaTrabajador['nombre']}</td>";
                     echo "<td class='text-center text-xs'>{$filaTrabajador['apellido']}</td>";
+                    echo "<td class='text-center text-xs'>{$filaTrabajador['nombre_grupo']}</td>";
                     echo "<td class='text-center text-xs'>{$filaTrabajador['cargo']}</td>";
                     echo "<td class='text-center text-xs'>{$filaTrabajador['fecha_contratacion']}</td>";
                     echo "<td class='text-center text-xs'>

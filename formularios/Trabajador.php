@@ -4,11 +4,12 @@ include_once '../crud/insertar.php'; // Ajusta la ruta según tu estructura de a
 if (isset($_POST['submit'])) {
   $nombre = $_POST['nombre'];
   $apellido = $_POST['apellido'];
+  $id_asignacion_fk = $_POST['id_asignacion_fk'];
   $tipo_puesto = $_POST['tipo_puesto'];
   $fecha_contratacion = $_POST['fecha_contratacion'];
 
   // Llama a la función de inserción
-  insertarTrabajador($nombre, $apellido, $tipo_puesto, $fecha_contratacion);
+  insertarTrabajador($nombre, $apellido,$id_asignacion_fk, $tipo_puesto, $fecha_contratacion);
 }
 
 // READ
@@ -87,8 +88,26 @@ if ($conexion) {
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
+                      <label for="fecha_contratacion" class="form-control-label">Grupo Asignado:</label>
+                      <select class="form-control" name="id_asignacion_fk" id="id_asignacion_fk">
+                        <option value="1">Grupo 1</option>
+                        <option value="2">Grupo 2</option>
+                        <option value="3">Grupo 3</option>
+                    </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
                       <label for="tipo_puesto" class="form-control-label">Tipo de Puesto:</label>
-                      <input class="form-control" type="text" name="tipo_puesto" id="tipo_puesto">
+                      <select class="form-control" name="tipo_puesto" id="tipo_puesto">
+                      <option value="1">Logístico</option>
+                      <option value="2">Especialista</option>
+                      <option value="3">Gerente</option>
+                      <option value="4">Analísta</option>
+                      <option value="5">Operador de Excavación</option>
+                      <option value="6">Operador de Maquinaria</option>
+                      <option value="7">Administrador</option>
+                    </select>
                     </div>
                   </div>
                   <div class="col-md-6">

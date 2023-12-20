@@ -62,17 +62,18 @@ function insertarPozo($idCampo, $nombre, $profundidad, $estado)
   }
 }
 
-// CREATE
-function insertarTrabajador($nombre, $apellido, $tipo_puesto, $fecha_contratacion){
+// CREATE Trabajador
+function insertarTrabajador($nombre, $apellido,$id_asignacion_fk, $tipo_puesto, $fecha_contratacion){
   $conexion = Cconexion::ConexionBD();
 
   if ($conexion) {
-      $sql = "EXEC sp_InsertTrabajador @Nombre=?, @Apellido=?, @IdTipoCargo=?, @FechaContratacion=?";
+      $sql = "EXEC sp_InsertTrabajador @Nombre=?, @Apellido=?, @IdAsignacion=?, @IdTipoCargo=?, @FechaContratacion=?";
       $stmt = $conexion->prepare($sql);
       $stmt->bindParam(1, $nombre, PDO::PARAM_STR);
       $stmt->bindParam(2, $apellido, PDO::PARAM_STR);
-      $stmt->bindParam(3, $tipo_puesto, PDO::PARAM_INT);
-      $stmt->bindParam(4, $fecha_contratacion, PDO::PARAM_STR);
+      $stmt->bindParam(3, $id_asignacion_fk, PDO::PARAM_INT);
+      $stmt->bindParam(4, $tipo_puesto, PDO::PARAM_INT);
+      $stmt->bindParam(5, $fecha_contratacion, PDO::PARAM_STR);
 
       $stmt->execute();
 
