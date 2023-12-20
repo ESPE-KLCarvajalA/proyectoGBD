@@ -5,7 +5,7 @@ class Cconexion{
         $host='localhost';
         $dbname='PROYECTOU1';
         $username='sa';
-        $pasword ='kiara1';
+        $pasword ='Administrador1234';
         $puerto=1433;
 
 

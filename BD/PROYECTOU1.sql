@@ -179,6 +179,14 @@ BEGIN
     VALUES (@Nombre, @Apellido, @IdAsignacion, @IdTipoCargo, @FechaContratacion);
 END;
 
+
+-- READ
+CREATE PROCEDURE sp_GetTrabajador
+AS
+BEGIN
+    SELECT * FROM Trabajador;
+END;
+
 --UPDATE
 CREATE PROCEDURE sp_UpdateTrabajador
     @IdTrabajador INT,
@@ -271,6 +279,12 @@ AS
 BEGIN
     INSERT INTO Pozo (id_campo_fk, nombre, profundidad, estado)
     VALUES (@IdCampo, @Nombre, @Profundidad, @Estado);
+END;
+
+CREATE PROCEDURE sp_GetPozo
+AS
+BEGIN
+    SELECT * FROM Pozo;
 END;
 
 -- UPDATE
